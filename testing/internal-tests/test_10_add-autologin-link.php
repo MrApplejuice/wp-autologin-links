@@ -25,22 +25,9 @@ test_assert($logged_in_user->ID == $admin_user->ID, "admin user not logged in");
 $action_name = "update-user_" . $test_user->ID;
 test_admin_referer_nonce($action_name);
 
-
-$adminurl = strtolower(admin_url());
-$referer  = strtolower(wp_get_referer());
-$nonce_is_valid   = isset( $_REQUEST["_wpnonce"] )
-  ? wp_verify_nonce($_REQUEST["_wpnonce"], $action_name)
-  : false;
-test_assert($nonce_is_valid, "Nonce was invalid");
-
-test_assert(
-  !(!$nonce_is_valid && !(-1 == $action && strpos($referer, $adminurl) === 0)),
-  "invalid referer");
-
 test_assert(
   check_admin_referer($action_name),
   "update-user nonce verification failed");
-
 test_assert(
   pkg_autologin_check_modify_permissions($test_user->ID),
   "user is not allowed to modify value");
