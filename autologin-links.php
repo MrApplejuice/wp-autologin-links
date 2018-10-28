@@ -379,9 +379,10 @@ function pkg_autologin_add_admin_bar_generate_link_button($wp_admin_bar) {
       ));
       
       // Add usernames that have a autologin link
-      $autologin_link_users = get_users(array (
-                                          'meta_key'     => PKG_AUTOLOGIN_USER_META_KEY,
-                                          'meta_compare' => 'EXISTS') );
+      $autologin_link_users = get_users(
+        array (
+          'meta_key'     => PKG_AUTOLOGIN_USER_META_KEY,
+          'meta_compare' => 'EXISTS') );
       
       if (count($autologin_link_users) == 0) {
         // No uses can use autologin links, show verbose message
