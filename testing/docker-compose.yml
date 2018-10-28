@@ -2,15 +2,15 @@ version: '3.6'
 services:
   mysql:
     image: mariadb:10.3.8
-    ports:
-      - '13306:3306'
+#    ports:
+#      - '13306:3306'
     environment:
       MYSQL_DATABASE: wordpress
       MYSQL_USER: wordpress
       MYSQL_PASSWORD: wordpress
       MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
   wordpress:
-    image: wordpress:4.9.7-php7.1-apache
+    image: "${wordpress_image_name}"
     restart: on-failure
     links:
       - mysql:mysql

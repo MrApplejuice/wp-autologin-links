@@ -1,8 +1,10 @@
 #!/bin/bash
 
+prefix=$( tr -d '.' <<< ${prefix:-testing} )
+
 echo "Installing internal test code..."
-docker exec -it testing_wordpress_1  rm -rf /tmp/internal-tests || true
-docker cp internal-tests testing_wordpress_1:/tmp/internal-tests
+docker exec -it ${prefix}_wordpress_1  rm -rf /tmp/internal-tests || true
+docker cp internal-tests ${prefix}_wordpress_1:/tmp/internal-tests
 
 tests=$( ls $(dirname $(readlink -e $0))/internal-tests/test_*.php | xargs -r -n1 basename | sort )
 any_failed=false
@@ -13,7 +15,7 @@ for test in $tests ; do
   echo "... running $test"
 
   docker exec -it -e TEST_FRAMEWORK=/tmp/internal-tests/test-framework.php \
-      testing_wordpress_1 php /tmp/internal-tests/$test
+      ${prefix}_wordpress_1 php /tmp/internal-tests/$test
   
   error_code=$?
   echo

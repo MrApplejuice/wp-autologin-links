@@ -2,6 +2,8 @@
 
 set -e
 
+prefix=$( tr -d '.' <<< ${prefix:-testing} )
+
 echo "Running install routine..."
 curl -X POST -d language= http://localhost:8888/wp-admin/install.php?step=1 > /dev/null
 
@@ -19,5 +21,5 @@ curl -X POST \
         http://localhost:8888/wp-admin/install.php?step=2 > /dev/null
 
 echo "Installing the plugin..."
-docker cp ../ testing_wordpress_1:/var/www/html/wp-content/plugins/autologin-links
+docker cp ../ ${prefix}_wordpress_1:/var/www/html/wp-content/plugins/autologin-links
 
