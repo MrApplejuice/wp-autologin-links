@@ -356,10 +356,10 @@ function pkg_autologin_load_autologin_show_link_scripts() {
   if (pkg_autologin_check_modify_permissions()) {
     wp_enqueue_script('pkg_autologin_show_link_popup_script',    '/wp-content/plugins/autologin-links/autologin-show-link-popup.js', array( 'jquery-ui-dialog' ));
     wp_localize_script('pkg_autologin_show_link_popup_script', 'pkg_autologin_show_link_translation_strings', array(
-      'link_text' =>    esc_html(__("Link:", PKG_AUTOLOGIN_LANGUAGE_DOMAIN + " javascript popup link title")),
-      'press_ctrl_c' => esc_html(__("(press ctrl+c to copy)", PKG_AUTOLOGIN_LANGUAGE_DOMAIN + " javascript popup copy instruction")),
-      'title_prefix' => __("Link for ", PKG_AUTOLOGIN_LANGUAGE_DOMAIN + " javascript popup prefix (followed by username)"),
-      'ok_button' =>    __("Ok", PKG_AUTOLOGIN_LANGUAGE_DOMAIN + " javascript popup")
+      'link_text' =>    esc_html(__("Link:", PKG_AUTOLOGIN_LANGUAGE_DOMAIN . " javascript popup link title")),
+      'press_ctrl_c' => esc_html(__("(press ctrl+c to copy)", PKG_AUTOLOGIN_LANGUAGE_DOMAIN . " javascript popup copy instruction")),
+      'title_prefix' => __("Link for ", PKG_AUTOLOGIN_LANGUAGE_DOMAIN . " javascript popup prefix (followed by username)"),
+      'ok_button' =>    __("Ok", PKG_AUTOLOGIN_LANGUAGE_DOMAIN . " javascript popup")
     ));
     
     wp_enqueue_style('pkg_autologin_show_link_popup_stylesheet', '/wp-content/plugins/autologin-links/autologin-show-link-popup.css');
