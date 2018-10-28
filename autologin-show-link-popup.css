@@ -1,0 +1,74 @@
+/* Distributed under the GPL 2 */
+
+/* do not show dialog by default! */
+#pkg_autologin_display_popup {
+  display: none;
+}
+
+.pkg_autologin_display_popup_class.ui-dialog {
+  background-color: #EFEFEF;
+  border-style: solid;
+  border-width: 2px;
+  border-color: #7F7F7F;
+  border-radius: 15px;
+  
+  padding: 2px;
+}
+
+.pkg_autologin_display_popup_class.ui-dialog .ui-draggable-handle {
+  cursor: move;
+}
+
+.pkg_autologin_display_popup_class.ui-dialog .ui-dialog-titlebar {
+  background-color: #EFEFEF;
+  border-style: solid;
+  border-width: 2px;
+  border-color: #AFAFAF;
+  border-radius: 10px;
+  
+  padding: 2px;
+  
+  overflow: auto;
+}
+
+.pkg_autologin_display_popup_class.ui-dialog .ui-dialog-titlebar .ui-dialog-title {
+  vertical-align: middle;
+  line-height: 30px;
+  margin-left: 10px;
+  font-family: verdana,arial,sans-serif;
+  font-weight: bold;
+}
+
+.pkg_autologin_display_popup_class.ui-dialog .ui-dialog-titlebar .ui-button.ui-dialog-titlebar-close {
+  float: right;
+  
+  border-radius: 4px;
+  
+  margin: 3px;
+
+  background-image: url("close.png");
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.pkg_autologin_display_popup_class.ui-dialog .ui-dialog-titlebar .ui-button.ui-dialog-titlebar-close .ui-icon {
+  display: none;
+}
+
+.pkg_autologin_display_popup_class.ui-dialog .ui-dialog-titlebar .ui-button.ui-dialog-titlebar-close .ui-button-text {
+  display: none;
+}
+
+.pkg_autologin_display_popup_class.ui-dialog .ui-dialog-content {
+  margin: 10px;
+  font-family: verdana,arial,sans-serif;
+}
+
+.pkg_autologin_display_popup_class.ui-dialog .ui-dialog-content p {
+  margin-bottom: 8px;
+}
+
+.pkg_autologin_display_popup_class.ui-dialog .ui-dialog-buttonpane {
+  margin: 10px;
+}
+

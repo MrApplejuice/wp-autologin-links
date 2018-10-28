@@ -1,0 +1,97 @@
+# LANGUAGE (LOCALE) translation for WordPress Plugin Autologin Links
+# Copyright (C) 2016 Paul Konstantin Gerke
+# This file is distributed under the same license as the Autologin Links 
+# package.
+# Paul Konstantin Gerke <wp_autologin@craftware.nl>, 2016.
+
+msgid ""
+msgstr ""
+"Project-Id-Version: WordPress Plugin Autologin Version 2.0\n"
+"Report-Msgid-Bugs-To: wp_autologin@craftware.nl\n"
+"POT-Creation-Date: 2012-01-15 00:45+0100\n"
+"PO-Revision-Date: 2016-02-21 01:00+0100\n"
+"Last-Translator: Paul Konstantin Gerke <wp_autologin@craftware.nl>\n"
+"Language-Team: -\n"
+"Language: en_US\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: autologin-links.php:270 autologin-links.php:312 - Shown if trying to login 
+#          with an invalid autologin code
+msgid "Invalid user ID."
+msgstr "Invalid user ID."
+
+#: autologin.php:224 - Shown if an invalid autologin code was used
+msgid "Invalid autologin link."
+msgstr "Invalid autologin link."
+
+#: autologin.php:278 - Shown if update on user edit page failed
+msgid "Invalid autologin code."
+msgstr "Invalid autologin code."
+
+#: autologin.php:287 - Shown if update on user edit page failed
+msgid "Failed to update autologin link."
+msgstr "Failed to update autologin link."
+
+#: autologin.php:293 - Shown if update on user edit page failed
+msgid "Failed to delete autologin link."
+msgstr "Failed to delete autologin link."
+
+#: autologin.php:324 - As in "generate new autologin link" (button)
+msgid "New"
+msgstr "New"
+
+#: autologin.php:325 - As in "delete autologin link" (button)
+msgid "Delete"
+msgstr "Delete"
+
+#: autologin.php:329 - Title of user edit section
+msgid "Auto-login"
+msgstr "Auto-login"
+
+#: autologin.php:333 - Name of the plugin shown on user profile page and on
+#: autologin-links.php:370    admin toolbar
+msgid "Auto-login link"
+msgstr "Auto-login link"
+
+#: autologin.php:335 - The marker shown when modifying an autologin link
+msgid "Unsaved"
+msgstr "Unsaved"
+
+#: autologin.php:337 - String shown to users who cannot edit their autologin 
+#                      link
+msgid "Please ask an administrator to change your login link"
+msgstr "Please ask an administrator to change your login link"
+
+
+#### New administrator GUI for generating autologin links for pages ####
+
+#: autologin-links.php:384 - Message if no autologin links have been generated
+#                            for any user (admin menu)
+msgid "No users with autologin codes"
+msgstr "No users with autologin codes"
+
+#: autologin-links.php:428 - Message prefix shown in admin menu when gereating
+#                            a link for a user
+msgid "Login link for"
+msgstr "Login link for"
+
+
+#: autologin-links.php:357 - Prefix in front of an user name in link-popup
+msgid "Link for "
+msgstr "Link for "
+
+#: autologin-links.php:355 - text-edit description text in link-popup
+msgid "Link:"
+msgstr "Link:"
+
+#: autologin-links.php:356 - copy instruction in link-popup
+msgid "(press ctrl+c to copy)"
+msgstr "(press ctrl+c to copy)"
+
+#: autologin-links.php:358 - Ok button text in link-popup
+msgid "Ok"
+msgstr "Ok"
+
+
