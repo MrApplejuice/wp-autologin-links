@@ -1,11 +1,15 @@
 
 define TEST_template =
-test-$(1):
+up-$(1):
 	wordpress_image_name=wordpress:$(1) docker-compose -p $(1) down
 	wordpress_image_name=wordpress:$(1) docker-compose -p $(1) up -d
 	sleep 8
 	prefix=$(1) bash auto-install-page.sh
+
+run-test-$(1): up-$(1)
 	prefix=$(1) ./run-tests.sh
+
+test-$(1): run-test-$(1)
 	wordpress_image_name=wordpress:$(1) docker-compose -p $(1) down
 
 ALL_TARGETS += test-$(1)
