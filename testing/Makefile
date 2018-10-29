@@ -16,20 +16,17 @@ TEST_CONTAINERS = \
 	4.9.8-php7.1-apache \
 
 
+.PHONY: all _all debug-print
+
+all: _all
+
+
 $(foreach x,$(TEST_CONTAINERS),$(eval $(call TEST_template,$(x))))
 
-.PHONY: all test test-server-up test-test test-server-down test
 
-all: $(ALL_TARGETS)
+_all: $(ALL_TARGETS)
 
-test-server-up: 
-	docker-compose up -d
-	sleep 8
 
-test:
-	bash auto-install-page.sh
-	./run-tests.sh
-
-test-server-down:
-	docker-compose down
+debug-print:
+	echo $(ALL_TARGETS)
 
