@@ -254,9 +254,9 @@ function pkg_autologin_load_autologin_scripts() {
   
   if ($user_id) { // Only if page is asking for data of a valid user
     if (pkg_autologin_check_view_permissions($user_id)) {
-      wp_enqueue_script('pkg_autologin_client_script', '/wp-content/plugins/autologin-links/autologin-client.js');
+      wp_enqueue_script('pkg_autologin_client_script', plugins_url('autologin-client.js',__FILE__));
       if (pkg_autologin_check_modify_permissions($user_id)) { 
-        wp_enqueue_script('pkg_autologin_admin_script', '/wp-content/plugins/autologin-links/autologin-admin.js', array("pkg_autologin_client_script"));
+        wp_enqueue_script('pkg_autologin_admin_script', plugins_url('autologin-admin.js',__FILE__), array("pkg_autologin_client_script"));
       }
     }
   }
@@ -354,7 +354,7 @@ function pkg_autologin_plugin_add_extra_profile_fields() {
 add_action('wp_enqueue_scripts', 'pkg_autologin_load_autologin_show_link_scripts');
 function pkg_autologin_load_autologin_show_link_scripts() {
   if (pkg_autologin_check_modify_permissions()) {
-    wp_enqueue_script('pkg_autologin_show_link_popup_script',    '/wp-content/plugins/autologin-links/autologin-show-link-popup.js', array( 'jquery-ui-dialog' ));
+    wp_enqueue_script('pkg_autologin_show_link_popup_script',  plugins_url( 'autologin-show-link-popup.js', __FILE__ ), array( 'jquery-ui-dialog' ));
     wp_localize_script('pkg_autologin_show_link_popup_script', 'pkg_autologin_show_link_translation_strings', array(
       'link_text' =>    esc_html(__("Link:", PKG_AUTOLOGIN_LANGUAGE_DOMAIN . " javascript popup link title")),
       'press_ctrl_c' => esc_html(__("(press ctrl+c to copy)", PKG_AUTOLOGIN_LANGUAGE_DOMAIN . " javascript popup copy instruction")),
@@ -362,7 +362,7 @@ function pkg_autologin_load_autologin_show_link_scripts() {
       'ok_button' =>    __("Ok", PKG_AUTOLOGIN_LANGUAGE_DOMAIN . " javascript popup")
     ));
     
-    wp_enqueue_style('pkg_autologin_show_link_popup_stylesheet', '/wp-content/plugins/autologin-links/autologin-show-link-popup.css');
+    wp_enqueue_style('pkg_autologin_show_link_popup_stylesheet', plugins_url('autologin-show-link-popup.css', __FILE__));
   }
 }
 
