@@ -439,7 +439,7 @@ function pkg_autologin_add_admin_bar_generate_link_button($wp_admin_bar) {
             'title'   => $title,
             'href'    => $url,
             'meta' => array(
-              'onclick' => 'pkg_autologin_show_copy_link_dialog("' . $htmlUserName . '", "' . esc_html($onclick_url) . '"); return false;',
+              'onclick' => 'pkg_autologin_show_copy_link_dialog("' . esc_html($user->user_login) . '", "' . esc_html($onclick_url) . '"); return false;',
               'target'  => "_blank"
             )
           ));

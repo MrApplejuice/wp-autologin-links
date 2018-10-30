@@ -20,6 +20,10 @@
 }
 
 .pkg_autologin_display_popup_class.ui-dialog .ui-dialog-titlebar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  
   background-color: #EFEFEF;
   border-style: solid;
   border-width: 2px;
@@ -32,8 +36,7 @@
 }
 
 .pkg_autologin_display_popup_class.ui-dialog .ui-dialog-titlebar .ui-dialog-title {
-  vertical-align: middle;
-  line-height: 30px;
+  flex-grow: 1;
   margin-left: 10px;
   font-family: verdana,arial,sans-serif;
   font-weight: bold;
