@@ -3,8 +3,8 @@ Contributors: WPAutoLogin
 Donate link: 
 Tags: login, link, automatic, auto, links
 Requires at least: 3.1
-Tested up to: 4.8.2
-Stable tag: trunk
+Tested up to: 4.9.7
+Stable tag: /branches/stable
 
 WARNING: THIS PLUGIN CAN BE INSECURE IF NOT USED CAUTIOUSLY. Allows selected 
 users to autologin to your WordPress website via autologin links.
@@ -62,6 +62,12 @@ issues regarding this problem, please visit the
 
 == Frequently Asked Questions ==
 
+- How to contribute?
+
+I moved the development of the plugin
+[to GitHub](https://github.com/MrApplejuice/wp-autologin-links). Please open
+issues or pull requests over there!
+
 == Screenshots ==
 
 1. The profile element, allowing administrators to create autologin links for
@@ -107,3 +113,4 @@ issues regarding this problem, please visit the
 
 Until now, nothing of the backand has changed and everything should 
 be backwards compatible.
+

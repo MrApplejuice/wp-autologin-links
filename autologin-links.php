@@ -4,7 +4,7 @@ Plugin Name: Autologin Links
 Plugin URI: https://www.craftware.info/projects-lists/wordpress-autologin/
 Description: Lets administrators generate autologin links for users.
 Author: Paul Konstantin Gerke
-Version: 1.07
+Version: 1.08
 Author URI: http://www.craftware.info/
 */
 
