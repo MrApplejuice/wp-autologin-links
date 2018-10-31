@@ -109,6 +109,15 @@ issues or pull requests over there!
 * Fixed HTTP/HTTPS protocol redirection. Special thanks at user @quiquoqua for noting.
 * Updated website details.
 
+= 1.08 =
+* Added integration test suite
+* Fix popup dialog for generating links with modern styles
+* Implemented concatenation fix "." by Hannes Etzelstorfer
+	* See: https://wordpress.org/support/topic/php-7-7-1-compatibility/
+* Reorganized svn branches to make development and deployment easier
+* Moved code development repository to GitHub:
+	* https://github.com/MrApplejuice/wp-autologin-links
+
 == Upgrade Notice ==
 
 Until now, nothing of the backand has changed and everything should 
