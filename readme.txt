@@ -4,7 +4,7 @@ Donate link:
 Tags: login, link, automatic, auto, links
 Requires at least: 3.1
 Tested up to: 4.9.7
-Stable tag: /branches/stable
+Stable tag: trunk
 
 WARNING: THIS PLUGIN CAN BE INSECURE IF NOT USED CAUTIOUSLY. Allows selected 
 users to autologin to your WordPress website via autologin links.
