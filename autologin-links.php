@@ -172,8 +172,18 @@ function pkg_autologin_authenticate() {
         $targetPage = $subURIs[1];
         
         // Query login codes
-        $loginCodeQuery = $wpdb->prepare("SELECT user_id FROM $wpdb->usermeta WHERE meta_value = '%s';", $autologin_code); // $autologin_code has been heavily cleaned before
-        $userIds = $wpdb->get_col($loginCodeQuery);
+        $loginCodeQuery = $wpdb->prepare("SELECT user_id, meta_value as login_code FROM $wpdb->usermeta WHERE meta_value = '%s';", $autologin_code); // $autologin_code has been heavily cleaned before
+        
+        $userIds = array();
+        $results = $wpdb->get_results($loginCodeQuery, ARRAY_A);
+        if ($results === NULL) {
+          wp_dir("Query failed!");
+        }
+        foreach ($results as $row) {
+          if ($row["login_code"] === $autologin_code) {
+            $userIds[] = $row["user_id"];
+          }
+        }
         
         // Double login codes? should never happen - better safe than sudden admin rights for someone :D
         if (count($userIds) > 1) {
