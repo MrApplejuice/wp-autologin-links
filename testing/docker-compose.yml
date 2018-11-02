@@ -2,8 +2,8 @@ version: '3.6'
 services:
   mysql:
     image: mariadb:10.3.8
-#    ports:
-#      - '13306:3306'
+    ports:
+      - '13306:3306'
     environment:
       MYSQL_DATABASE: wordpress
       MYSQL_USER: wordpress
@@ -16,6 +16,8 @@ services:
       - mysql:mysql
     ports:
       - '8888:80'
+    volumes:
+     - ..:/var/www/html/wp-content/plugins/autologin-links:ro
     environment:
       WORDPRESS_DB_HOST: mysql
       WORDPRESS_DB_USER: wordpress

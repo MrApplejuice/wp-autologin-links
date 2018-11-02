@@ -1,12 +1,24 @@
 #!/bin/bash
 
-set -e
-
 prefix=$( tr -d '.' <<< ${prefix:-testing} )
 
-echo "Running install routine..."
-curl -X POST -d language= http://localhost:8888/wp-admin/install.php?step=1 > /dev/null
+retry_count=20
 
+echo "Running install routine..."
+while [ $retry_count -gt 0 ] ; do
+  if curl -X POST -d language= http://localhost:8888/wp-admin/install.php?step=1 > /dev/null ; then
+    break
+  fi
+  retry_count=$[ $retry_count - 1 ]
+  echo "Retrying ($retry_count)..."
+  sleep 1
+done
+if [ $retry_count -le 0 ] ; then
+  echo "Failed to setup website"
+  exit 1
+fi
+
+set -e
 curl -X POST \
     -d admin_email=wordpress@localhost.local \
     -d admin_password=wordpress \
@@ -19,7 +31,3 @@ curl -X POST \
     -d user_name=wordpress \
     -d weblog_title=wordpress \
         http://localhost:8888/wp-admin/install.php?step=2 > /dev/null
-
-echo "Installing the plugin..."
-docker cp ../ ${prefix}_wordpress_1:/var/www/html/wp-content/plugins/autologin-links
-
