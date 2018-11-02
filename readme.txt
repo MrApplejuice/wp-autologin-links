@@ -80,35 +80,6 @@ issues or pull requests over there!
 
 == Changelog ==
 
-= 1.01 =
-* First published version
-
-= 1.02 =
-* Fixed directory name to match conventions on wordpress.org
-
-= 1.03 =
-* Quick-fix was too quick, more inline directory strings changes were necessary
-
-= 1.04 =
-* Minor update of a line checking on invalid userid
-* Major review checking if the code still is working with the newest version of
-  Wordpress which is should. I cannot find any vulnerabilities that are related
-  to this plugin except for the ones mentioned in the module description.
-
-= 1.05 =
-* New UI for administrators to generate autologin links for arbitrary pages
-* Added screenshots
-* Updated i10n files, however...
-* TODO: ...i10n seems to be broken at the moment (.mo file is ignored)
-
-= 1.06 =
-* Fixed long standing bug, not allowing one to update their profile page when 
-  an autologin link was set for the user.
-
-= 1.07 =
-* Fixed HTTP/HTTPS protocol redirection. Special thanks at user @quiquoqua for noting.
-* Updated website details.
-
 = 1.08 =
 * Added integration test suite
 * Fix popup dialog for generating links with modern styles
@@ -117,6 +88,35 @@ issues or pull requests over there!
 * Reorganized svn branches to make development and deployment easier
 * Moved code development repository to GitHub:
 	* https://github.com/MrApplejuice/wp-autologin-links
+
+= 1.07 =
+* Fixed HTTP/HTTPS protocol redirection. Special thanks at user @quiquoqua for noting.
+* Updated website details.
+
+= 1.06 =
+* Fixed long standing bug, not allowing one to update their profile page when 
+  an autologin link was set for the user.
+
+= 1.05 =
+* New UI for administrators to generate autologin links for arbitrary pages
+* Added screenshots
+* Updated i10n files, however...
+* TODO: ...i10n seems to be broken at the moment (.mo file is ignored)
+
+= 1.04 =
+* Minor update of a line checking on invalid userid
+* Major review checking if the code still is working with the newest version of
+  Wordpress which is should. I cannot find any vulnerabilities that are related
+  to this plugin except for the ones mentioned in the module description.
+
+= 1.03 =
+* Quick-fix was too quick, more inline directory strings changes were necessary
+
+= 1.02 =
+* Fixed directory name to match conventions on wordpress.org
+
+= 1.01 =
+* First published version
 
 == Upgrade Notice ==
 
