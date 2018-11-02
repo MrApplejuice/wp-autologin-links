@@ -80,6 +80,10 @@ issues or pull requests over there!
 
 == Changelog ==
 
+= 1.09 =
+* Fixed vulnerability where autologin-links were verified with a case insensitive
+  comparison.
+
 = 1.08 =
 * Added integration test suite
 * Fix popup dialog for generating links with modern styles
