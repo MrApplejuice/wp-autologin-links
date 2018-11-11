@@ -24,9 +24,13 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
+//! The URL-$_GET key used to transport a autologin-link to the website
 define('PKG_AUTOLOGIN_VALUE_NAME', 'autologin_code');
+
+//! The key for the user metadata database table that autologin links are under. 
 define('PKG_AUTOLOGIN_USER_META_KEY', 'pkg_autologin_code');
 
+//! Language domain key for localization
 define('PKG_AUTOLOGIN_LANGUAGE_DOMAIN', 'pkg_autologin');
 
 /********* TOOL FUNCTION *********/
