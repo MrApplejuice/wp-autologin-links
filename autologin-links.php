@@ -4,7 +4,7 @@ Plugin Name: Autologin Links
 Plugin URI: https://www.craftware.info/projects-lists/wordpress-autologin/
 Description: Lets administrators generate autologin links for users.
 Author: Paul Konstantin Gerke
-Version: 1.09
+Version: 1.10.0a
 Author URI: http://www.craftware.info/
 */
 
@@ -24,14 +24,28 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
+//! Length for newly generated autologin links 
+define('PKG_AUTOLOGIN_CODE_LENGTH', 32);
+
+//! Length for newly generated autologin links
+define('PKG_AUTOLOGIN_CODE_CHARACTERS', "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789");
+
 //! The URL-$_GET key used to transport a autologin-link to the website
 define('PKG_AUTOLOGIN_VALUE_NAME', 'autologin_code');
 
-//! The key for the user metadata database table that autologin links are under. 
+//! The key for the user metadata database table that autologin links are under.
 define('PKG_AUTOLOGIN_USER_META_KEY', 'pkg_autologin_code');
+
+//! The key for the user metadata database that stores staged (unsaved) login keys
+define('PKG_AUTOLOGIN_STAGED_CODE_USER_META_KEY', 'pkg_autologin_staged_code');
+
+//! The nonce used to stage the changed code. Must match the submitted nonce 
+//! on save, otherwise the staged nonce will be dismissed.
+define('PKG_AUTOLOGIN_STAGED_CODE_NONCE_USER_META_KEY', 'pkg_autologin_staged_code_nonce');
 
 //! Language domain key for localization
 define('PKG_AUTOLOGIN_LANGUAGE_DOMAIN', 'pkg_autologin');
+
 
 /********* TOOL FUNCTION *********/
 
@@ -233,7 +247,7 @@ function pkg_autologin_extract_login_link_error() {
     if (in_array($rawMsg, array('invalid_login_code'))) {
       $secureMsg = $rawMsg;
       
-      // Added error texts
+      // Add error texts
       switch ($secureMsg) {
         case 'invalid_login_code':
           $errors->add("invalid_autologin_link", __("Invalid autologin link.", PKG_AUTOLOGIN_LANGUAGE_DOMAIN));
@@ -319,6 +333,35 @@ function pkg_autologin_update_link() {
       wp_die("YOU SHOULD NOT GET HERE BECAUSE EXECUTION SHOULD HAVE DIED - However, and you may not do this!");
     }
   }
+}
+
+/**
+ * Stages a new code for saving later. When the store-command is actually triggered,
+ * this stored key will be stored as the new current key. To verify that the stored
+ * staged key refers to the current user-presented update form, the nonce associated
+ * with the profile page is also stored.
+ */
+function pkg_stage_new_code() {
+  $user_id = pkg_autologin_get_page_user_id($_POST);
+  if (!$user_id) {
+    wp_die(__('Invalid user ID.'));
+  }
+  
+  if (!check_ajax_referer("update-user_$user_id")) {
+    wp_die(__('Invalid referer.'));
+  }
+  
+  $hasher = new PasswordHash(8, true); // The PasswordHasher has a php-version independent "safeish" random generator
+  $random_ints = unpack("L*", $hasher->get_random_bytes(4 * PKG_AUTOLOGIN_CODE_LENGTH));
+  $char_count = strlen(PKG_AUTOLOGIN_CODE_CHARACTERS);
+  $new_code = "";
+  for ($i = 0; $i < PKG_AUTOLOGIN_CODE_LENGTH; $i++) {
+    $new_code = $new_code . PKG_AUTOLOGIN_CODE_CHARACTERS[$random_ints[$i] % $char_count];
+  }
+  
+  $wpnonce = $_REQUEST['_wpnonce'];
+  update_user_meta($user_id, PKG_AUTOLOGIN_STAGED_CODE_NONCE_USER_META_KEY, $wpnonce);
+  update_user_meta($user_id, PKG_AUTOLOGIN_STAGED_CODE_USER_META_KEY, $new_code);
 }
 
 add_action('show_user_profile', 'pkg_autologin_plugin_add_extra_profile_fields');

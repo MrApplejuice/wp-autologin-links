@@ -27,6 +27,11 @@ function test_assert($assertion, $message) {
   }
 }
 
+/**
+ * Logs in a user using a given userid
+ * 
+ * @param int $user_id
+ */
 function test_login_user($user_id) {
   $userToLogin = get_user_by('id', (int) $user_id);
   do_action('wp_login', $userToLogin->name, $userToLogin);
@@ -50,10 +55,18 @@ function test_login_user($user_id) {
   wp_set_current_user( $user_id ? $user_id : 0 );
 }
 
+/**
+ * Creates a nonce for an admin page such that its contents can be modified. 
+ * 
+ * @param string $key
+ */
 function test_admin_referer_nonce($key) {
   $_REQUEST["_wpnonce"] = wp_create_nonce($key);
 }
 
+/**
+ * Called to finish a test successfully. 
+ */
 function finish_test() {
   die(21);
 }

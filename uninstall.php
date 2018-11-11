@@ -18,8 +18,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 if (defined('WP_UNINSTALL_PLUGIN')) {
   global $wpdb;
   
-  // Only thing to do is to clean up the user metatable 
+  // Cleanup the entire users-table
   $wpdb->query("DELETE FROM $wpdb->usermeta WHERE meta_key = \"pkg_autologin_code\";");
+  $wpdb->query("DELETE FROM $wpdb->usermeta WHERE meta_key = \"pkg_staged_autologin_code\";");
+  $wpdb->query("DELETE FROM $wpdb->usermeta WHERE meta_key = \"pkg_staged_code_nonce\";");
   // No error checking or anything - this plugin is about to die, so there is no time to 
   // display anything anymore
 }

@@ -80,6 +80,9 @@ issues or pull requests over there!
 
 == Changelog ==
 
+= 1.10.0 =
+* Switched to Semver versioning scheme.
+  
 = 1.09 =
 * Fixed vulnerability where autologin-links were verified with a case insensitive
   comparison.

@@ -6,7 +6,7 @@ retry_count=20
 
 echo "Running install routine..."
 while [ $retry_count -gt 0 ] ; do
-  if curl -X POST -d language= http://localhost:8888/wp-admin/install.php?step=1 > /dev/null ; then
+  if curl -s -X POST -d language= http://localhost:8888/wp-admin/install.php?step=1 > /dev/null ; then
     break
   fi
   retry_count=$[ $retry_count - 1 ]
@@ -19,7 +19,7 @@ if [ $retry_count -le 0 ] ; then
 fi
 
 set -e
-curl -X POST \
+curl -s -X POST \
     -d admin_email=wordpress@localhost.local \
     -d admin_password=wordpress \
     -d admin_password2=wordpress \
