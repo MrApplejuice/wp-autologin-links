@@ -294,43 +294,55 @@ function pkg_autologin_load_autologin_scripts() {
 add_action('personal_options_update', 'pkg_autologin_update_link');
 add_action('edit_user_profile_update', 'pkg_autologin_update_link');
 function pkg_autologin_update_link() {
-  $user_id = pkg_autologin_get_page_user_id($_POST); // Get data from POST array
-  if (!$user_id) {
-    wp_die(__('Invalid user ID.'));
-  }
-
-  if (array_key_exists('pkg_autologin_code', $_POST)) { // Check if code should be updated
-    $cleanedKey = False;
-    if ($_POST['pkg_autologin_code']) {
-      $cleanedKey = preg_replace('/[^a-zA-Z0-9]+/', '', $_POST['pkg_autologin_code']);
-      if (strlen($cleanedKey) != 30) {
-        wp_die(__('Invalid autologin code.', PKG_AUTOLOGIN_LANGUAGE_DOMAIN));
-      } 
+  // Check if code should be updated
+  if (array_key_exists('pkg_autologin_update', $_POST) && 
+      (($_POST["pkg_autologin_update"] === "update") || ($_POST["pkg_autologin_update"] === "delete"))) {
+    $user_id = pkg_autologin_get_page_user_id($_POST); // Get data from POST array
+    if (!$user_id) {
+      wp_die(__('Invalid user ID.'));
     }
     
-    if (check_admin_referer('update-user_' . $user_id)) { // Check nonce - not validated before in user-edit.php :-(
-      if (pkg_autologin_check_modify_permissions($user_id)) {
-        if ($cleanedKey) {
-          if (!add_user_meta($user_id, PKG_AUTOLOGIN_USER_META_KEY, $cleanedKey, True)) {
-            if (!update_user_meta($user_id, PKG_AUTOLOGIN_USER_META_KEY, $cleanedKey)) {
-              // Check if the key was changed at all - if not this is an error of update_user_meta
-              if (get_user_meta($user_id, PKG_AUTOLOGIN_USER_META_KEY, True) != $cleanedKey) {
-                wp_die(__('Failed to update autologin link.', PKG_AUTOLOGIN_LANGUAGE_DOMAIN));
-              }
-            }
-          }
-        } else {
-          if (get_user_meta($user_id, PKG_AUTOLOGIN_USER_META_KEY, True)) {
-            if (!delete_user_meta($user_id, PKG_AUTOLOGIN_USER_META_KEY)) {
-              wp_die(__('Failed to delete autologin link.', PKG_AUTOLOGIN_LANGUAGE_DOMAIN));
-            }
+    if (!check_admin_referer('update-user_' . $user_id)) { // Check nonce - not validated before in user-edit.php :-(
+      wp_die("YOU SHOULD NOT GET HERE BECAUSE EXECUTION SHOULD HAVE DIED - However, and you may not do this!");
+    }
+    
+    if (!pkg_autologin_check_modify_permissions($user_id)) {
+      wp_die(__( 'You do not have permission to edit this user.' )); // Use general error message - Perhaps better use special one like "you may not change the autologin link" ?
+    }
+    
+    if ($_POST["pkg_autologin_update"] === "update") {
+      $nonce = get_user_meta($user_id, PKG_AUTOLOGIN_STAGED_CODE_NONCE_USER_META_KEY, True);
+      if ($nonce !== $_REQUEST['_wpnonce']) {
+        wp_die(__("Invalid form submission."));
+      }
+      
+      $newKey = "" . get_user_meta($user_id, PKG_AUTOLOGIN_STAGED_CODE_USER_META_KEY, True);
+      $cleanedKey = "";
+      for ($i = 0; $i < strlen($newKey); $i++) {
+        if (strpos(PKG_AUTOLOGIN_CODE_CHARACTERS, $newKey) !== False) {
+          $cleanedKey = $cleanedKey . $newKey[$i];
+        }
+      }
+      if (strlen($cleanedKey) != PKG_AUTOLOGIN_CODE_LENGTH) {
+        wp_die(__('Invalid autologin code.', PKG_AUTOLOGIN_LANGUAGE_DOMAIN));
+      }
+      
+      if (!add_user_meta($user_id, PKG_AUTOLOGIN_USER_META_KEY, $cleanedKey, True)) {
+        if (!update_user_meta($user_id, PKG_AUTOLOGIN_USER_META_KEY, $cleanedKey)) {
+          // Check if the key was changed at all - if not this is an error of update_user_meta
+          if (get_user_meta($user_id, PKG_AUTOLOGIN_USER_META_KEY, True) != $cleanedKey) {
+            wp_die(__('Failed to update autologin link.', PKG_AUTOLOGIN_LANGUAGE_DOMAIN));
           }
         }
-      } else {
-        wp_die(__( 'You do not have permission to edit this user.' )); // Use general error message - Perhaps better use special one like "you may not change the autologin link" ?
+      }
+    } else if ($_POST["pkg_autologin_update"] === "delete") {
+      if (get_user_meta($user_id, PKG_AUTOLOGIN_USER_META_KEY, True)) {
+        if (!delete_user_meta($user_id, PKG_AUTOLOGIN_USER_META_KEY)) {
+          wp_die(__('Failed to delete autologin link.', PKG_AUTOLOGIN_LANGUAGE_DOMAIN));
+        }
       }
     } else {
-      wp_die("YOU SHOULD NOT GET HERE BECAUSE EXECUTION SHOULD HAVE DIED - However, and you may not do this!");
+      wp_die(__("Invalid action."));
     }
   }
 }
@@ -381,7 +393,7 @@ function pkg_autologin_plugin_add_extra_profile_fields() {
       function addControlButtons($current_link_code) { // Controls for generating new links or deleting old ones only available to admins
         $prefix = home_url('?' . PKG_AUTOLOGIN_VALUE_NAME . '=');
         ?>
-        <input type="hidden" autocomplete="off" id="pkg_autologin_code" name="pkg_autologin_code" value="<?php echo $current_link_code; ?>" />
+        <input type="hidden" autocomplete="off" id="pkg_autologin_update" name="pkg_autologin_update" value="" />
         <input type="button" value="<?php _e("New", PKG_AUTOLOGIN_LANGUAGE_DOMAIN); ?>" id="pkg_autologin_new_link_button" onclick="pkg_autologin_new_link_click(this, <?php echo "'$prefix'"; ?>)" />
         <input type="button" value="<?php _e("Delete", PKG_AUTOLOGIN_LANGUAGE_DOMAIN); ?>" id="pkg_autologin_delete_link_button" onclick="pkg_autologin_delete_link_click(this)" />
         <?php
