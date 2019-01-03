@@ -17,6 +17,8 @@ endef
 TEST_CONTAINERS = \
 	4.9.8-php5.6-apache \
 	4.9.8-php7.1-apache \
+	5.0.2-php5.6-apache \
+	5.0.2-php7.1-apache \
 
 
 .PHONY: all _all debug-print
