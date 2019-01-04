@@ -91,9 +91,9 @@ function pkg_autologin_check_view_permissions($user_id=NULL) {
  * 
  * <p>array('a' => 1, 'b' => 2, 'c' => 3) becomes a=1&b=2&c=3</p>
  * 
- * @param $parameters
+ * @param array $parameters
  *   The parameters to join together to form the GET-request url part
- * @return
+ * @return string
  *   The formed get-request string
  */
 function pkg_autologin_join_get_parameters($parameters) {
@@ -112,11 +112,11 @@ function pkg_autologin_join_get_parameters($parameters) {
  * The id is retrieved via the 'user_id' key in the $parameterArray (defaults
  * to the $_GET array).
  * 
- * @param $parameterArray
+ * @param array $parameterArray
  *   Allows to override the default of using the $_GET-array as source for
  *   reading the 'user_id' field.
- * @return
- *   (boolean) False if the user_id could not be read from $_GET or derived 
+ * @return boolean
+ *   False if the user_id could not be read from $_GET or derived 
  *   via wp_get_current_user if the current page is a user's profile page.
  *   (int) The user_id of the user thats page is being edited if 
  */
@@ -151,8 +151,8 @@ function pkg_autologin_get_page_user_id($parameterArray=NULL) {
  * the function also strips the PKG_AUTOLOGIN_VALUE_NAME value name if defined
  * so that it can be redefined by appending it later.
  * 
- * @return
- *   (string) The reassembled $_GET-query string specified in the URL. Will
+ * @return string
+ *   The reassembled $_GET-query string specified in the URL. Will
  *   include the '?'-separator any $_GET-query data was present. Example value:
  *     '?id=53&metadata=join' 
  *       given $_GET = array( 'id' => '53', 'metadata' => 'join' )
@@ -282,7 +282,7 @@ function pkg_autologin_load_autologin_scripts() {
   
   if ($user_id) { // Only if page is asking for data of a valid user
     if (pkg_autologin_check_view_permissions($user_id)) {
-      wp_enqueue_script('pkg_autologin_client_script', plugins_url('autologin-client.js',__FILE__));
+      wp_enqueue_script('pkg_autologin_client_script', plugins_url('autologin-client.js',__FILE__), array("jquery"));
       if (pkg_autologin_check_modify_permissions($user_id)) { 
         wp_enqueue_script('pkg_autologin_admin_script', plugins_url('autologin-admin.js',__FILE__), array("pkg_autologin_client_script"));
       }
@@ -310,17 +310,23 @@ function pkg_autologin_update_link() {
       wp_die(__( 'You do not have permission to edit this user.' )); // Use general error message - Perhaps better use special one like "you may not change the autologin link" ?
     }
     
+    if (!array_key_exists(PKG_AUTOLOGIN_STAGED_CODE_NONCE_USER_META_KEY, $_POST)) {
+      wp_die(__("Missing or invalid staing nonce"));
+    }
+    $submitted_staging_nonce = (string) $_POST[PKG_AUTOLOGIN_STAGED_CODE_NONCE_USER_META_KEY];
+    
     if ($_POST["pkg_autologin_update"] === "update") {
       $nonce = get_user_meta($user_id, PKG_AUTOLOGIN_STAGED_CODE_NONCE_USER_META_KEY, True);
-      if ($nonce !== $_REQUEST['_wpnonce']) {
+      if ($nonce !== $submitted_staging_nonce) {
         wp_die(__("Invalid form submission."));
       }
       
       $newKey = "" . get_user_meta($user_id, PKG_AUTOLOGIN_STAGED_CODE_USER_META_KEY, True);
       $cleanedKey = "";
       for ($i = 0; $i < strlen($newKey); $i++) {
-        if (strpos(PKG_AUTOLOGIN_CODE_CHARACTERS, $newKey) !== False) {
-          $cleanedKey = $cleanedKey . $newKey[$i];
+        $c = substr($newKey, $i, 1);
+        if (strpos(PKG_AUTOLOGIN_CODE_CHARACTERS, $c) !== False) {
+          $cleanedKey = $cleanedKey . $c;
         }
       }
       if (strlen($cleanedKey) != PKG_AUTOLOGIN_CODE_LENGTH) {
@@ -352,6 +358,9 @@ function pkg_autologin_update_link() {
  * this stored key will be stored as the new current key. To verify that the stored
  * staged key refers to the current user-presented update form, the nonce associated
  * with the profile page is also stored.
+ * 
+ * @return string
+ *   Returns the newly generated code.
  */
 function pkg_stage_new_code() {
   $user_id = pkg_autologin_get_page_user_id($_POST);
@@ -359,7 +368,7 @@ function pkg_stage_new_code() {
     wp_die(__('Invalid user ID.'));
   }
   
-  if (!check_ajax_referer("update-user_$user_id")) {
+  if (!check_ajax_referer("pkg-update-user-link_$user_id")) {
     wp_die(__('Invalid referer.'));
   }
   
@@ -374,6 +383,23 @@ function pkg_stage_new_code() {
   $wpnonce = $_REQUEST['_wpnonce'];
   update_user_meta($user_id, PKG_AUTOLOGIN_STAGED_CODE_NONCE_USER_META_KEY, $wpnonce);
   update_user_meta($user_id, PKG_AUTOLOGIN_STAGED_CODE_USER_META_KEY, $new_code);
+  
+  return $new_code;
+}
+
+add_action('wp_ajax_my_action', 'pkg_autologin_plugin_ajax_wrapper');
+function pkg_autologin_plugin_ajax_wrapper() {
+  $user_id = pkg_autologin_get_page_user_id($_POST);
+  if (!$user_id) {
+    wp_die(__('Invalid user ID.'));
+  }
+  
+  $new_code = pkg_stage_new_code();
+  echo json_encode(array(
+      "user_id" => $user_id,
+      "new_code" => $new_code,
+  ));
+  wp_die();
 }
 
 add_action('show_user_profile', 'pkg_autologin_plugin_add_extra_profile_fields');
