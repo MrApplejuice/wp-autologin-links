@@ -193,7 +193,10 @@ function pkg_autologin_authenticate() {
         $targetPage = $subURIs[1];
         
         // Query login codes
-        $loginCodeQuery = $wpdb->prepare("SELECT user_id, meta_value as login_code FROM $wpdb->usermeta WHERE meta_value = '%s';", $autologin_code); // $autologin_code has been heavily cleaned before
+        $loginCodeQuery = $wpdb->prepare(
+          "SELECT user_id, meta_value as login_code FROM $wpdb->usermeta WHERE meta_key = %s and meta_value = '%s';",
+          PKG_AUTOLOGIN_USER_META_KEY,
+          $autologin_code); // $autologin_code has been heavily cleaned before
         
         $userIds = array();
         $results = $wpdb->get_results($loginCodeQuery, ARRAY_A);
@@ -380,11 +383,13 @@ function pkg_stage_new_code() {
   }
   
   $hasher = new PasswordHash(8, true); // The PasswordHasher has a php-version independent "safeish" random generator
-  $random_ints = unpack("L*", $hasher->get_random_bytes(4 * PKG_AUTOLOGIN_CODE_LENGTH));
+  
+  // Workaround: first value seems to always be zero, so we will skip the first value
+  $random_ints = unpack("L*", $hasher->get_random_bytes(4 * (PKG_AUTOLOGIN_CODE_LENGTH + 1)));
   $char_count = strlen(PKG_AUTOLOGIN_CODE_CHARACTERS);
   $new_code = "";
   for ($i = 0; $i < PKG_AUTOLOGIN_CODE_LENGTH; $i++) {
-    $new_code = $new_code . PKG_AUTOLOGIN_CODE_CHARACTERS[$random_ints[$i] % $char_count];
+    $new_code = $new_code . PKG_AUTOLOGIN_CODE_CHARACTERS[$random_ints[$i + 1] % $char_count];
   }
   
   $wpnonce = $_REQUEST['_wpnonce'];
