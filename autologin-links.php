@@ -360,7 +360,13 @@ function pkg_autologin_update_link() {
 }
 
 function pkg_new_user_update_nonce_name($user_id) {
-    return "pkg-update-user-link_$user_id";
+  $metadata = get_user_meta($user_id, PKG_AUTOLOGIN_USER_META_KEY, false);
+  if (count($metadata) > 0) {
+    $codeNonceData = "c" . $metadata[0];
+  } else {
+    $codeNonceData = '[empty]';
+  }
+  return "pkg-update-user-link_" . wp_nonce_tick() . "_$user_id" . "_$codeNonceData";
 }
 
 /**
