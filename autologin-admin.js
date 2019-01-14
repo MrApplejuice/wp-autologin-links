@@ -1,23 +1,45 @@
 /* Distributed under the GPL 2 */
+"use strict";
+
+function pkg_autologin_get_link_field() {
+  return jQuery('#pkg_autologin_link'); 
+}
 
 function pkg_autologin_append_unsaved_node() {
-  var unsavedMarker = document.getElementById('pkg_autologin_unsaved_marker')
-  unsavedMarker.style.display = "inline";
+  var unsavedMarker = jQuery('#pkg_autologin_unsaved_marker')
+  unsavedMarker.css("display", "inline");
+}
+
+function pkg_autologin_show_wait_spinner(do_show) {
+  jQuery('#pkg_autologin_link_wait_spinner').css("display", do_show ? "inline" : "none");
 }
 
 function pkg_autologin_new_link_click(sender, prefix) {
-  var newValue = "TODOTODOTODO";
+  pkg_autologin_show_wait_spinner(true);
   
-  var updateField = document.getElementById("pkg_autologin_update");
-  updateField.value = "update";
-  
-  var linkTextNode = pkg_autologin_get_link_field_text();
-  linkTextNode.nodeValue = prefix + newValue + " ";
-  
-  pkg_autologin_append_unsaved_node();
+  jQuery.ajax({
+    url: ajaxurl, 
+    method: "POST",
+    data: {
+      action: "pkg_autologin_plugin_ajax_new_code",
+      user_id: parseInt(jQuery("#pkg_autologin_user_id").text()),
+      _ajax_nonce: jQuery("#pkg_autologin_nonce").val(),
+    }
+  }).done(function(data) {
+      console.log(data);
+      pkg_autologin_append_unsaved_node();
+      jQuery("#pkg_autologin_update").val("update");
+      pkg_autologin_get_link_field().text(prefix + data.new_code);
+  }).fail(function() {
+      pkg_autologin_get_link_field().text("FAILED");
+  }).always(function() {
+      pkg_autologin_show_wait_spinner(false);
+  });
 }
 
 function pkg_autologin_delete_link_click(sender) {
+  failure();
+
   var updateField = document.getElementById("pkg_autologin_update");
   updateField.value = "delete";
 
@@ -26,4 +48,3 @@ function pkg_autologin_delete_link_click(sender) {
 
   pkg_autologin_append_unsaved_node();
 }
-

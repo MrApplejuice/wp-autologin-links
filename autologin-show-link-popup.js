@@ -1,4 +1,5 @@
 /* Distributed under the GPL 2 */
+"use strict";
 
 jQuery(function($) {
   $(document).ready(function() {
@@ -19,6 +20,7 @@ jQuery(function($) {
     textElement.click(selectAllHandler);
   });
   
+  var 
   function show_copy_link_dialog(user, link) {
     var dialog = $("#pkg_autologin_display_popup");
     

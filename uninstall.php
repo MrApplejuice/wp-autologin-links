@@ -20,7 +20,7 @@ if (defined('WP_UNINSTALL_PLUGIN')) {
   
   // Cleanup the entire users-table
   $wpdb->query("DELETE FROM $wpdb->usermeta WHERE meta_key = \"pkg_autologin_code\";");
-  $wpdb->query("DELETE FROM $wpdb->usermeta WHERE meta_key = \"pkg_staged_autologin_code\";");
+  $wpdb->query("DELETE FROM $wpdb->usermeta WHERE meta_key = \"pkg_autologin_staged_code\";");
   $wpdb->query("DELETE FROM $wpdb->usermeta WHERE meta_key = \"pkg_staged_code_nonce\";");
   // No error checking or anything - this plugin is about to die, so there is no time to 
   // display anything anymore
