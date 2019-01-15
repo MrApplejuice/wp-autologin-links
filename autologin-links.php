@@ -299,6 +299,18 @@ function pkg_autologin_load_autologin_scripts() {
 // Add autologin links to user pages and corresponding update elements to admin pages
 add_action('personal_options_update', 'pkg_autologin_update_link');
 add_action('edit_user_profile_update', 'pkg_autologin_update_link');
+
+function pkg_autologin_validate_update_nonce($user_id) {
+  if (!array_key_exists(PKG_AUTOLOGIN_STAGED_CODE_NONCE_USER_META_KEY, $_POST)) {
+    wp_die(__("Missing or invalid staging nonce"));
+  }
+  $submitted_staging_nonce = (string) $_POST[PKG_AUTOLOGIN_STAGED_CODE_NONCE_USER_META_KEY];
+  $nonce = get_user_meta($user_id, PKG_AUTOLOGIN_STAGED_CODE_NONCE_USER_META_KEY, True);
+  if ($nonce !== $submitted_staging_nonce) {
+    wp_die(__("Invalid request for login code change."));
+  }
+}
+
 function pkg_autologin_update_link() {
   // Check if code should be updated
   if (array_key_exists('pkg_autologin_update', $_POST) && 
@@ -316,16 +328,8 @@ function pkg_autologin_update_link() {
       wp_die(__( 'You do not have permission to edit this user.' )); // Use general error message - Perhaps better use special one like "you may not change the autologin link" ?
     }
     
-    if (!array_key_exists(PKG_AUTOLOGIN_STAGED_CODE_NONCE_USER_META_KEY, $_POST)) {
-      wp_die(__("Missing or invalid staing nonce"));
-    }
-    $submitted_staging_nonce = (string) $_POST[PKG_AUTOLOGIN_STAGED_CODE_NONCE_USER_META_KEY];
-    
     if ($_POST["pkg_autologin_update"] === "update") {
-      $nonce = get_user_meta($user_id, PKG_AUTOLOGIN_STAGED_CODE_NONCE_USER_META_KEY, True);
-      if ($nonce !== $submitted_staging_nonce) {
-        wp_die(__("Invalid form submission."));
-      }
+      pkg_autologin_validate_update_nonce($user_id);
       
       $newKey = "" . get_user_meta($user_id, PKG_AUTOLOGIN_STAGED_CODE_USER_META_KEY, True);
       $cleanedKey = "";
@@ -348,6 +352,8 @@ function pkg_autologin_update_link() {
         }
       }
     } else if ($_POST["pkg_autologin_update"] === "delete") {
+      pkg_autologin_validate_update_nonce($user_id);
+      
       if (get_user_meta($user_id, PKG_AUTOLOGIN_USER_META_KEY, True)) {
         if (!delete_user_meta($user_id, PKG_AUTOLOGIN_USER_META_KEY)) {
           wp_die(__('Failed to delete autologin link.', PKG_AUTOLOGIN_LANGUAGE_DOMAIN));
@@ -359,6 +365,17 @@ function pkg_autologin_update_link() {
   }
 }
 
+/**
+ * Constructs a new nonce key name to modify some
+ * user's auto login key. This key should be passed into
+ * wp_create_nonce to create a real nonce for the currently 
+ * logged in user.
+ * 
+ * @param int $user_id
+ *   The user id whose autologin code should be adapted.
+ * @return string
+ *   The nonce key name. This can be passed
+ */
 function pkg_new_user_update_nonce_name($user_id) {
   $metadata = get_user_meta($user_id, PKG_AUTOLOGIN_USER_META_KEY, false);
   if (count($metadata) > 0) {
@@ -370,8 +387,8 @@ function pkg_new_user_update_nonce_name($user_id) {
 }
 
 /**
- * Stages a new code for saving later. When the store-command is actually triggered,
- * this stored key will be stored as the new current key. To verify that the stored
+ * Stages a new randomly generated code for saving later. When the store-command 
+ * is actually triggered, this stored key will be stored as the new current key. To verify that the stored
  * staged key refers to the current user-presented update form, the nonce associated
  * with the profile page is also stored.
  * 
@@ -405,6 +422,13 @@ function pkg_stage_new_code() {
   return $new_code;
 }
 
+/**
+ * Stages a deletion of the currently saved user autologin code.
+ */
+function pkg_delete_code() {
+  
+}
+
 add_action('wp_ajax_pkg_autologin_plugin_ajax_new_code', 'pkg_autologin_plugin_new_code_ajax_wrapper');
 function pkg_autologin_plugin_new_code_ajax_wrapper() {
   $user_id = pkg_autologin_get_page_user_id($_POST);
@@ -425,6 +449,17 @@ function pkg_autologin_plugin_new_code_ajax_wrapper() {
 
 add_action('show_user_profile', 'pkg_autologin_plugin_add_extra_profile_fields');
 add_action('edit_user_profile', 'pkg_autologin_plugin_add_extra_profile_fields');
+
+function pkg_autologin_add_control_buttons($current_link_code, $user_id) { // Controls for generating new links or deleting old ones only available to admins
+  $prefix = home_url('?' . PKG_AUTOLOGIN_VALUE_NAME . '=');
+  ?>
+  <input type="hidden" autocomplete="off" id="pkg_autologin_update" name="pkg_autologin_update" value="" />
+  <input type="hidden" autocomplete="off" id="pkg_autologin_nonce" name="pkg_autologin_staged_code_nonce" value="<?php echo wp_create_nonce(pkg_new_user_update_nonce_name($user_id)); ?>" />
+  <input type="button" value="<?php _e("New", PKG_AUTOLOGIN_LANGUAGE_DOMAIN); ?>" id="pkg_autologin_new_link_button" onclick="pkg_autologin_new_link_click(this, <?php echo "'$prefix'"; ?>)" />
+  <input type="button" value="<?php _e("Delete", PKG_AUTOLOGIN_LANGUAGE_DOMAIN); ?>" id="pkg_autologin_delete_link_button" onclick="pkg_autologin_delete_link_click(this)" />
+  <?php
+}
+
 function pkg_autologin_plugin_add_extra_profile_fields() {
   $user_id = pkg_autologin_get_page_user_id();
   
@@ -437,15 +472,6 @@ function pkg_autologin_plugin_add_extra_profile_fields() {
     }
     
     if (pkg_autologin_check_view_permissions()) {
-      function addControlButtons($current_link_code, $user_id) { // Controls for generating new links or deleting old ones only available to admins
-        $prefix = home_url('?' . PKG_AUTOLOGIN_VALUE_NAME . '=');
-        ?>
-        <input type="hidden" autocomplete="off" id="pkg_autologin_update" name="pkg_autologin_update" value="" />
-        <input type="hidden" autocomplete="off" id="pkg_autologin_nonce" name="pkg_autologin_staged_code_nonce" value="<?php echo wp_create_nonce(pkg_new_user_update_nonce_name($user_id)); ?>" />
-        <input type="button" value="<?php _e("New", PKG_AUTOLOGIN_LANGUAGE_DOMAIN); ?>" id="pkg_autologin_new_link_button" onclick="pkg_autologin_new_link_click(this, <?php echo "'$prefix'"; ?>)" />
-        <input type="button" value="<?php _e("Delete", PKG_AUTOLOGIN_LANGUAGE_DOMAIN); ?>" id="pkg_autologin_delete_link_button" onclick="pkg_autologin_delete_link_click(this)" />
-        <?php
-      }
       ?>
 <h3><?php _e("Auto-login", PKG_AUTOLOGIN_LANGUAGE_DOMAIN);?></h3>
 <table class="form-table">
@@ -457,7 +483,7 @@ function pkg_autologin_plugin_add_extra_profile_fields() {
         <img style="display:none;" id="pkg_autologin_link_wait_spinner" src="<?php echo plugins_url("wait.gif", __FILE__); ?>" />
         <span id="pkg_autologin_unsaved_marker" style="display:none">&#91;<?php _e("Unsaved", PKG_AUTOLOGIN_LANGUAGE_DOMAIN);?>&#93;</span>
         <p id="pkg_autologin_link"><?php echo ($current_link_code ? home_url('?' . PKG_AUTOLOGIN_VALUE_NAME . "=$current_link_code") : "-"); ?></p>
-        <?php if (pkg_autologin_check_modify_permissions()) { addControlButtons($current_link_code, $user_id); } else { ?>
+        <?php if (pkg_autologin_check_modify_permissions()) { pkg_autologin_add_control_buttons($current_link_code, $user_id); } else { ?>
           <i>[<?php _e("Please ask an administrator to change your login link", PKG_AUTOLOGIN_LANGUAGE_DOMAIN);?>]</i>
         <?php } ?>
       </td>
