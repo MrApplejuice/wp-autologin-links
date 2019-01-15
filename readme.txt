@@ -82,6 +82,7 @@ issues or pull requests over there!
 
 = 1.10.0 =
 * Switched to Semver versioning scheme.
+* Fixed accidental global namespace pollution
   
 = 1.09 =
 * Fixed vulnerability where autologin-links were verified with a case insensitive
