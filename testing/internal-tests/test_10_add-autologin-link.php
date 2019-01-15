@@ -26,7 +26,7 @@ test_assert($logged_in_user->ID == $admin_user->ID, "admin user not logged in");
 
 // ================================
 echo "== \"Open\" the admin page for user $test_user->ID ==\n";
-$action_name = "pkg-update-user-link_" . $test_user->ID;
+$action_name = pkg_new_user_update_nonce_name($test_user->ID);
 test_admin_referer_nonce($action_name);
 $_GET["user_id"] = $test_user->ID;
 $_POST["user_id"] = $test_user->ID;
