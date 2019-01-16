@@ -467,7 +467,6 @@ function pkg_autologin_plugin_new_code_ajax_wrapper() {
 
 add_action('wp_ajax_pkg_autologin_plugin_ajax_delete_code', 'pkg_autologin_plugin_delete_code_ajax_wrapper');
 function pkg_autologin_plugin_delete_code_ajax_wrapper() {
-  echo "gaga";
   $user_id = pkg_autologin_get_page_user_id($_POST);
   if (!$user_id) {
     wp_die(__('Invalid user ID.'), '', array('response' => 400));

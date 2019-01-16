@@ -41,7 +41,7 @@ test_assert(
   
 // ================================
 echo "== Create a new staged user-login link for a given page ==\n";
-$new_code_result = pkg_stage_new_code();
+$new_code_result = pkg_autologin_stage_new_code();
 
 $staging_nonce = get_user_meta($test_user->ID, PKG_AUTOLOGIN_STAGED_CODE_NONCE_USER_META_KEY, True);
 if (!$staging_nonce) {

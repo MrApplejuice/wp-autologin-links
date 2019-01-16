@@ -34,7 +34,7 @@ $_POST["user_id"] = $test_user->ID;
   
 // ================================
 echo "== Create a new staged user-login link for a given page ==\n";
-$new_code = pkg_stage_new_code();
+$new_code = pkg_autologin_stage_new_code();
 $staging_nonce = get_user_meta($test_user->ID, PKG_AUTOLOGIN_STAGED_CODE_NONCE_USER_META_KEY, True);
 
 // ================================
@@ -57,7 +57,7 @@ $_POST["user_id"] = $test_user->ID;
 
 // ================================
 echo "== Stage deletion of the login link ==\n";
-pkg_delete_code();
+pkg_autologin_stage_code_deletion();
 $staging_nonce = get_user_meta($test_user->ID, PKG_AUTOLOGIN_STAGED_CODE_NONCE_USER_META_KEY, True);
 
 // ================================
@@ -69,8 +69,8 @@ $_POST["pkg_autologin_update"] = "delete";
 $_POST[PKG_AUTOLOGIN_STAGED_CODE_NONCE_USER_META_KEY] = "$staging_nonce";
 pkg_autologin_update_link();
 
-$autologin_key = get_user_meta($test_user->ID, PKG_AUTOLOGIN_USER_META_KEY, True);
-test_assert($autologin_key === null, "Staged key not deleted");
+$autologin_key = get_user_meta($test_user->ID, PKG_AUTOLOGIN_USER_META_KEY, false);
+test_assert(count($autologin_key) == 0, "Staged key not deleted");
 
 finish_test();
 ?>
