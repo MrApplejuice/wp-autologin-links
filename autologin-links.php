@@ -354,6 +354,11 @@ function pkg_autologin_update_link() {
     } else if ($_POST["pkg_autologin_update"] === "delete") {
       pkg_autologin_validate_update_nonce($user_id);
       
+      $new_key = get_user_meta($user_id, PKG_AUTOLOGIN_STAGED_CODE_USER_META_KEY, True);
+      if ($new_key !== null) {
+        wp_die(__('Invalid autologin deletion request.'));
+      }
+      
       if (get_user_meta($user_id, PKG_AUTOLOGIN_USER_META_KEY, True)) {
         if (!delete_user_meta($user_id, PKG_AUTOLOGIN_USER_META_KEY)) {
           wp_die(__('Failed to delete autologin link.', PKG_AUTOLOGIN_LANGUAGE_DOMAIN));
@@ -392,10 +397,12 @@ function pkg_new_user_update_nonce_name($user_id) {
  * staged key refers to the current user-presented update form, the nonce associated
  * with the profile page is also stored.
  * 
+ * $_POST["user_id"] and $_POST["_wpnonce"] must be set before this function can be executed. 
+ * 
  * @return string
  *   Returns the newly generated code.
  */
-function pkg_stage_new_code() {
+function pkg_autologin_stage_new_code() {
   $user_id = pkg_autologin_get_page_user_id($_POST);
   if (!$user_id) {
     wp_die(__('Invalid user ID.'), '', array('response' => 400));
@@ -425,8 +432,19 @@ function pkg_stage_new_code() {
 /**
  * Stages a deletion of the currently saved user autologin code.
  */
-function pkg_delete_code() {
+function pkg_autologin_stage_code_deletion() {
+  $user_id = pkg_autologin_get_page_user_id($_POST);
+  if (!$user_id) {
+    wp_die(__('Invalid user ID.'), '', array('response' => 400));
+  }
   
+  if (!check_ajax_referer(pkg_new_user_update_nonce_name($user_id))) {
+    wp_die(__('Invalid referer.'));
+  }
+
+  $wpnonce = $_REQUEST['_wpnonce'];
+  update_user_meta($user_id, PKG_AUTOLOGIN_STAGED_CODE_NONCE_USER_META_KEY, $wpnonce);
+  update_user_meta($user_id, PKG_AUTOLOGIN_STAGED_CODE_USER_META_KEY, null);
 }
 
 add_action('wp_ajax_pkg_autologin_plugin_ajax_new_code', 'pkg_autologin_plugin_new_code_ajax_wrapper');
@@ -440,13 +458,31 @@ function pkg_autologin_plugin_new_code_ajax_wrapper() {
     $_REQUEST['_wpnonce'] = $_REQUEST['_ajax_nonce'];
   }
   
-  $new_code = pkg_stage_new_code();
+  $new_code = pkg_autologin_stage_new_code();
   wp_send_json(array(
-      "user_id" => $user_id,
-      "new_code" => $new_code,
+    "user_id" => $user_id,
+    "new_code" => $new_code,
   ));
 }
 
+add_action('wp_ajax_pkg_autologin_plugin_ajax_delete_code', 'pkg_autologin_plugin_delete_code_ajax_wrapper');
+function pkg_autologin_plugin_delete_code_ajax_wrapper() {
+  echo "gaga";
+  $user_id = pkg_autologin_get_page_user_id($_POST);
+  if (!$user_id) {
+    wp_die(__('Invalid user ID.'), '', array('response' => 400));
+  }
+  
+  if (!isset($_REQUEST['_wpnonce'])) {
+    $_REQUEST['_wpnonce'] = $_REQUEST['_ajax_nonce'];
+  }
+
+  pkg_autologin_stage_code_deletion();
+  wp_send_json(array(
+    "user_id" => $user_id,
+   ));
+}
+  
 add_action('show_user_profile', 'pkg_autologin_plugin_add_extra_profile_fields');
 add_action('edit_user_profile', 'pkg_autologin_plugin_add_extra_profile_fields');
 
@@ -455,8 +491,8 @@ function pkg_autologin_add_control_buttons($current_link_code, $user_id) { // Co
   ?>
   <input type="hidden" autocomplete="off" id="pkg_autologin_update" name="pkg_autologin_update" value="" />
   <input type="hidden" autocomplete="off" id="pkg_autologin_nonce" name="pkg_autologin_staged_code_nonce" value="<?php echo wp_create_nonce(pkg_new_user_update_nonce_name($user_id)); ?>" />
-  <input type="button" value="<?php _e("New", PKG_AUTOLOGIN_LANGUAGE_DOMAIN); ?>" id="pkg_autologin_new_link_button" onclick="pkg_autologin_new_link_click(this, <?php echo "'$prefix'"; ?>)" />
-  <input type="button" value="<?php _e("Delete", PKG_AUTOLOGIN_LANGUAGE_DOMAIN); ?>" id="pkg_autologin_delete_link_button" onclick="pkg_autologin_delete_link_click(this)" />
+  <input type="button" value="<?php _e("New", PKG_AUTOLOGIN_LANGUAGE_DOMAIN); ?>" id="pkg_autologin_new_link_button" onclick="pkg_autologin_new_link_click(this, <?php echo "'$prefix'"; ?>)" class="button" />
+  <input type="button" value="<?php _e("Delete", PKG_AUTOLOGIN_LANGUAGE_DOMAIN); ?>" id="pkg_autologin_delete_link_button" onclick="pkg_autologin_delete_link_click(this)" class="button" />
   <?php
 }
 

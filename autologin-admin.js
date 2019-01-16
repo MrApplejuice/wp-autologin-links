@@ -26,25 +26,33 @@ function pkg_autologin_new_link_click(sender, prefix) {
       _ajax_nonce: jQuery("#pkg_autologin_nonce").val(),
     }
   }).done(function(data) {
-      console.log(data);
-      pkg_autologin_append_unsaved_node();
-      jQuery("#pkg_autologin_update").val("update");
-      pkg_autologin_get_link_field().text(prefix + data.new_code);
+    pkg_autologin_append_unsaved_node();
+    jQuery("#pkg_autologin_update").val("update");
+    pkg_autologin_get_link_field().text(prefix + data.new_code);
   }).fail(function() {
-      pkg_autologin_get_link_field().text("FAILED");
+    pkg_autologin_get_link_field().text("FAILED");
   }).always(function() {
-      pkg_autologin_show_wait_spinner(false);
+    pkg_autologin_show_wait_spinner(false);
   });
 }
 
 function pkg_autologin_delete_link_click(sender) {
-  failure();
-
-  var updateField = document.getElementById("pkg_autologin_update");
-  updateField.value = "delete";
-
-  var linkTextNode = pkg_autologin_get_link_field_text();
-  linkTextNode.nodeValue = "-";
-
-  pkg_autologin_append_unsaved_node();
+  pkg_autologin_show_wait_spinner(true);
+  jQuery.ajax({
+    url: ajaxurl, 
+    method: "POST",
+    data: {
+      action: "pkg_autologin_plugin_ajax_delete_code",
+      user_id: parseInt(jQuery("#pkg_autologin_user_id").text()),
+      _ajax_nonce: jQuery("#pkg_autologin_nonce").val(),
+    }
+  }).done(function(data) {
+    pkg_autologin_append_unsaved_node();
+    jQuery("#pkg_autologin_update").val("delete");
+    pkg_autologin_get_link_field().text("-");
+  }).fail(function() {
+    pkg_autologin_get_link_field().text("FAILED");
+  }).always(function() {
+    pkg_autologin_show_wait_spinner(false);
+  });
 }
