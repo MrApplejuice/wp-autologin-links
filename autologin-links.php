@@ -227,6 +227,7 @@ function pkg_autologin_authenticate() {
             $GETQuery = pkg_autologin_generate_get_postfix();
             
             $protocol = (isset($_SERVER["HTTPS"]) && ($_SERVER["HTTPS"] === "on")) ? "https" : "http";
+            header("Cache-Control: no-cache, no-store, must-revalidate, private, max-age=0, s-maxage=0");
             wp_redirect($protocol . '://' . $_SERVER['HTTP_HOST'] . $targetPage . $GETQuery);
             exit;
           }
