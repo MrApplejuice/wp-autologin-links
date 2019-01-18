@@ -311,6 +311,9 @@ function pkg_autologin_validate_update_nonce($user_id) {
   }
 }
 
+/**
+ * This function is registered for handling update-profile requests on a user's admin page.
+ */
 function pkg_autologin_update_link() {
   // Check if code should be updated
   if (array_key_exists('pkg_autologin_update', $_POST) && 
@@ -575,6 +578,7 @@ function pkg_autologin_add_admin_bar_generate_link_button($wp_admin_bar) {
         ));
       } else {
         // Get the target website address parts
+        $subURIs = array();
         if (preg_match('/^([^\?]+)\?(.*)/', $_SERVER["REQUEST_URI"], $subURIs) === 1) {
           // Page contained $_GET element - reassamble
           $targetPage = $subURIs[1];             
