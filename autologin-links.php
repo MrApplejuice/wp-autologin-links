@@ -386,7 +386,7 @@ function pkg_new_user_update_nonce_name($user_id) {
   if (count($metadata) > 0) {
     $codeNonceData = "c" . $metadata[0];
   } else {
-    $codeNonceData = '[empty]';
+    $codeNonceData = 'e';
   }
   return "pkg-update-user-link_" . wp_nonce_tick() . "_$user_id" . "_$codeNonceData";
 }

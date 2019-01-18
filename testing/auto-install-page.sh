@@ -2,7 +2,7 @@
 
 prefix=$( tr -d '.' <<< ${prefix:-testing} )
 
-retry_count=20
+retry_count=60
 
 echo "Running install routine..."
 while [ $retry_count -gt 0 ] ; do

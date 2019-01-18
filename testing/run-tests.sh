@@ -16,10 +16,10 @@ for test in $tests ; do
 
   docker exec -it -e TEST_FRAMEWORK=/tmp/internal-tests/test-framework.php \
       ${prefix}_wordpress_1 php /tmp/internal-tests/$test
-  
+
   error_code=$?
   echo
-  
+
   if [ $error_code -eq 21 ] ; then
     echo "SUCCEEDED - $test"
   else
