@@ -83,6 +83,8 @@ issues or pull requests over there!
 = 1.10.0 =
 * Switched to Semver versioning scheme.
 * Fixed accidental global namespace pollution
+* Attempted fixing serving of seemingly cached websites when visting an autologin
+  link by sending no-cache headers when visiting a autologin link website.
   
 = 1.09 =
 * Fixed vulnerability where autologin-links were verified with a case insensitive
