@@ -80,11 +80,16 @@ issues or pull requests over there!
 
 == Changelog ==
 
+= 1.10.1 =
+* Fixed readme
+* Added more testing platform to the intergation tests
+
 = 1.10.0 =
 * Switched to Semver versioning scheme.
 * Fixed accidental global namespace pollution
 * Attempted fixing serving of seemingly cached websites when visting an autologin
   link by sending no-cache headers when visiting a autologin link website.
+* Autologin-links are now generated on the server via AJAX
   
 = 1.09 =
 * Fixed vulnerability where autologin-links were verified with a case insensitive
