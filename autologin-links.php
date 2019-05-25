@@ -424,7 +424,7 @@ function pkg_autologin_stage_new_code() {
   $new_code = "";
   $_str_copy_php55 = PKG_AUTOLOGIN_CODE_CHARACTERS;
   for ($i = 0; $i < PKG_AUTOLOGIN_CODE_LENGTH; $i++) {
-    $new_code = $new_code . $_str_copy_php56[$random_ints[$i + 1] % $char_count];
+    $new_code = $new_code . $_str_copy_php55[$random_ints[$i + 1] % $char_count];
   }
   
   $wpnonce = $_REQUEST['_wpnonce'];
