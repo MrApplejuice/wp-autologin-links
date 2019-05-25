@@ -422,8 +422,9 @@ function pkg_autologin_stage_new_code() {
   $random_ints = unpack("L*", $hasher->get_random_bytes(4 * (PKG_AUTOLOGIN_CODE_LENGTH + 1)));
   $char_count = strlen(PKG_AUTOLOGIN_CODE_CHARACTERS);
   $new_code = "";
+  $_str_copy_php55 = PKG_AUTOLOGIN_CODE_CHARACTERS;
   for ($i = 0; $i < PKG_AUTOLOGIN_CODE_LENGTH; $i++) {
-    $new_code = $new_code . PKG_AUTOLOGIN_CODE_CHARACTERS[$random_ints[$i + 1] % $char_count];
+    $new_code = $new_code . $_str_copy_php56[$random_ints[$i + 1] % $char_count];
   }
   
   $wpnonce = $_REQUEST['_wpnonce'];

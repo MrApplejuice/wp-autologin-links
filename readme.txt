@@ -83,6 +83,7 @@ issues or pull requests over there!
 = 1.10.1 =
 * Fixed readme
 * Added more testing platform to the intergation tests
+* Small fix for old PHP version 5.5
 
 = 1.10.0 =
 * Switched to Semver versioning scheme.
