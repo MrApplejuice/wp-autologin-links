@@ -85,6 +85,8 @@ issues or pull requests over there!
 * Added more testing platform to the intergation tests
 * Small fix for old PHP version 5.5
 * Add even more cache-prevention code
+* Add JavaScript linter to debug JavaScript related issues earlier
+* Fixed JavaScript bugs
 
 = 1.10.0 =
 * Switched to Semver versioning scheme.
