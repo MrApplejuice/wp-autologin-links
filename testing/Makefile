@@ -24,10 +24,13 @@ TEST_CONTAINERS = \
 	5.0.3-php7.3-apache \
 
 
-.PHONY: all _all debug-print
+.PHONY: all _all debug-print lintjs
 
 all: _all
 
+lintjs:
+	@cd .. ; echo Testing *.js
+	cd .. ; cat *.js | eslint --global ajaxurl,pkg_autologin_show_link_translation_strings --stdin
 
 $(foreach x,$(TEST_CONTAINERS),$(eval $(call TEST_template,$(x))))
 
