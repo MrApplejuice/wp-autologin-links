@@ -227,7 +227,14 @@ function pkg_autologin_authenticate() {
             $GETQuery = pkg_autologin_generate_get_postfix();
             
             $protocol = (isset($_SERVER["HTTPS"]) && ($_SERVER["HTTPS"] === "on")) ? "https" : "http";
+            
+            // Augment my solution with https://stackoverflow.com/questions/1907653/how-to-force-page-not-to-be-cached-in-php
+            header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
             header("Cache-Control: no-cache, no-store, must-revalidate, private, max-age=0, s-maxage=0");
+            header("Cache-Control: post-check=0, pre-check=0", false);
+            header("Pragma: no-cache");
+            header("Expires: Mon, 01 Jan 1990 01:00:00 GMT");
+            
             wp_redirect($protocol . '://' . $_SERVER['HTTP_HOST'] . $targetPage . $GETQuery);
             exit;
           }
