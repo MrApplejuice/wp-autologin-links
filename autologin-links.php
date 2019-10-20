@@ -406,6 +406,27 @@ function pkg_new_user_update_nonce_name($user_id) {
 }
 
 /**
+ * This function generates a new code string that can be used as a autologin code. The
+ * function uses safely randomized integer values from the wordpress API.
+ * 
+ * @return string
+ *   The newly generated autologin code.
+ */
+function pkg_autologin_generate_code() {
+  $hasher = new PasswordHash(8, true); // The PasswordHasher has a php-version independent "safeish" random generator
+  
+  // Workaround: first value seems to always be zero, so we will skip the first value
+  $random_ints = unpack("L*", $hasher->get_random_bytes(4 * (PKG_AUTOLOGIN_CODE_LENGTH + 1)));
+  $char_count = strlen(PKG_AUTOLOGIN_CODE_CHARACTERS);
+  $new_code = "";
+  $_str_copy_php55 = PKG_AUTOLOGIN_CODE_CHARACTERS;
+  for ($i = 0; $i < PKG_AUTOLOGIN_CODE_LENGTH; $i++) {
+    $new_code = $new_code . $_str_copy_php55[$random_ints[$i + 1] % $char_count];
+  }
+  return $new_code;
+}
+
+/**
  * Stages a new randomly generated code for saving later. When the store-command 
  * is actually triggered, this stored key will be stored as the new current key. To verify that the stored
  * staged key refers to the current user-presented update form, the nonce associated
@@ -425,17 +446,8 @@ function pkg_autologin_stage_new_code() {
   if (!check_ajax_referer(pkg_new_user_update_nonce_name($user_id))) {
     wp_die(__('Invalid referer.'));
   }
-  
-  $hasher = new PasswordHash(8, true); // The PasswordHasher has a php-version independent "safeish" random generator
-  
-  // Workaround: first value seems to always be zero, so we will skip the first value
-  $random_ints = unpack("L*", $hasher->get_random_bytes(4 * (PKG_AUTOLOGIN_CODE_LENGTH + 1)));
-  $char_count = strlen(PKG_AUTOLOGIN_CODE_CHARACTERS);
-  $new_code = "";
-  $_str_copy_php55 = PKG_AUTOLOGIN_CODE_CHARACTERS;
-  for ($i = 0; $i < PKG_AUTOLOGIN_CODE_LENGTH; $i++) {
-    $new_code = $new_code . $_str_copy_php55[$random_ints[$i + 1] % $char_count];
-  }
+
+  $new_code = pkg_autologin_generate_code();
   
   $wpnonce = $_REQUEST['_wpnonce'];
   update_user_meta($user_id, PKG_AUTOLOGIN_STAGED_CODE_NONCE_USER_META_KEY, $wpnonce);
