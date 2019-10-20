@@ -4,7 +4,7 @@ Plugin Name: Autologin Links
 Plugin URI: https://www.craftware.info/projects-lists/wordpress-autologin/
 Description: Lets administrators generate autologin links for users.
 Author: Paul Konstantin Gerke
-Version: 1.10.1
+Version: 1.11.0
 Author URI: http://www.craftware.info/
 */
 
@@ -296,9 +296,9 @@ function pkg_autologin_load_autologin_scripts() {
   
   if ($user_id) { // Only if page is asking for data of a valid user
     if (pkg_autologin_check_view_permissions($user_id)) {
-      wp_enqueue_script('pkg_autologin_client_script', plugins_url('autologin-client.js',__FILE__), array("jquery"));
+      wp_enqueue_script('pkg_autologin_client_script', plugins_url('autologin-client.js', __FILE__), array("jquery"));
       if (pkg_autologin_check_modify_permissions($user_id)) { 
-        wp_enqueue_script('pkg_autologin_admin_script', plugins_url('autologin-admin.js',__FILE__), array("pkg_autologin_client_script"));
+        wp_enqueue_script('pkg_autologin_admin_script', plugins_url('autologin-admin.js', __FILE__), array("pkg_autologin_client_script"));
       }
     }
   }
@@ -580,6 +580,13 @@ function pkg_autologin_add_admin_bar_generate_link_button($wp_admin_bar) {
       if (count($autologin_link_users) == 0) {
         // No uses can use autologin links, show verbose message
         $title = __('No users with autologin codes', PKG_AUTOLOGIN_LANGUAGE_DOMAIN);
+        $wp_admin_bar->add_menu( array(
+          'parent' => 'pkg-generate-auto-login-link-menu',
+          'id'     => 'pkg-generate-auto-login-link-menu-nousers',
+          'title'  => $title
+        ));
+      } elseif (count($autologin_link_users) > 20) {
+        $title = __('Disabled for sites with more than 20 autologin codes', PKG_AUTOLOGIN_LANGUAGE_DOMAIN);
         $wp_admin_bar->add_menu( array(
           'parent' => 'pkg-generate-auto-login-link-menu',
           'id'     => 'pkg-generate-auto-login-link-menu-nousers',

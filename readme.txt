@@ -80,6 +80,10 @@ issues or pull requests over there!
 
 == Changelog ==
 
+= 1.11.0 =
+* Add limit to the number of autologin-links shown in the admin 
+  menu (GitHub issue #11)
+
 = 1.10.1 =
 * Fixed readme
 * Added more testing platform to the intergation tests
@@ -139,6 +143,6 @@ issues or pull requests over there!
 
 == Upgrade Notice ==
 
-Until now, nothing of the backand has changed and everything should 
+Until now, nothing of the backend has changed and everything should 
 be backwards compatible.
 
