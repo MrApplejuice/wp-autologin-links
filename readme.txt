@@ -83,6 +83,8 @@ issues or pull requests over there!
 = 1.11.0 =
 * Add limit to the number of autologin-links shown in the admin 
   menu (GitHub issue #11)
+* Add new constant PKG_AUTOLOGIN_VERSION allowing to check the 
+  autologin link version in-code
 
 = 1.10.1 =
 * Fixed readme

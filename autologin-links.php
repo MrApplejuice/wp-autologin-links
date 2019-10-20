@@ -27,6 +27,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Yup, we will use some internal wordpress features here!
 require_once ABSPATH . WPINC . "/class-phpass.php";
 
+//! In-code defintion to allow detection of the autlogin-plugin and its version
+define('PKG_AUTOLOGIN_VERSION', 11100); // Version: 1.11.0
+
 //! Length for newly generated autologin links 
 define('PKG_AUTOLOGIN_CODE_LENGTH', 32);
 
