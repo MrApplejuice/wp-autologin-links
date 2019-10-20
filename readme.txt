@@ -75,7 +75,7 @@ issues or pull requests over there!
    reasons.
 2. The administrator UI allowing administrators to generate autologin links
    that redirect visitors to specific pages of a website. The screenshot
-   shows the menu together with the popup widnow that allows copying of the
+   shows the menu together with the popup window that allows copying of the
    redirect link.
 
 == Changelog ==
