@@ -106,8 +106,7 @@ function pkg_autologin_join_get_parameters($parameters) {
   $keys = array_keys($parameters);
   $assignments = array();
   foreach ($keys as $key) {
-    $assignments[] = "$key=$parameters[$key]";
-    
+    $assignments[] = rawurlencode($key) . "=" . rawurlencode($parameters[$key]);
   }
   return implode('&', $assignments);
 }

@@ -85,6 +85,8 @@ issues or pull requests over there!
   menu (GitHub issue #11)
 * Add new constant PKG_AUTOLOGIN_VERSION allowing to check the 
   autologin link version in-code
+* Fix: spaced getting stripped from extra query parameters when
+  adding a autologin link.
 
 = 1.10.1 =
 * Fixed readme
