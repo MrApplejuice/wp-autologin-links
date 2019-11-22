@@ -1,0 +1,8 @@
+deploy-exclude
+.*
+*.sh
+node_modules
+testing
+yarn.lock
+package.json
+package-lock.json
