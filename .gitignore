@@ -1,5 +1,4 @@
 /node_modules
 .buildpath
-/yarn.lock
 /.project
 /.settings
