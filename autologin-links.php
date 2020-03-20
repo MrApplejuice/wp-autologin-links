@@ -4,7 +4,7 @@ Plugin Name: Autologin Links
 Plugin URI: https://www.craftware.info/projects-lists/wordpress-autologin/
 Description: Lets administrators generate autologin links for users.
 Author: Paul Konstantin Gerke
-Version: 1.11.0
+Version: 1.11.1
 Author URI: http://www.craftware.info/
 */
 
@@ -28,7 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 require_once ABSPATH . WPINC . "/class-phpass.php";
 
 //! In-code defintion to allow detection of the autlogin-plugin and its version
-define('PKG_AUTOLOGIN_VERSION', 11100); // Version: 1.11.0
+define('PKG_AUTOLOGIN_VERSION', 11101); // Version: 1.11.1
 
 //! Length for newly generated autologin links 
 define('PKG_AUTOLOGIN_CODE_LENGTH', 32);
@@ -574,6 +574,24 @@ function pkg_autologin_load_autologin_show_link_scripts() {
 }
 
 
+/**
+ * Fuses a wordpress site postfix with the siteurl to
+ * build a complete url finding the largest overlap between the urls
+ */
+function pkg_autologin_fuse_url_with_site_url($url) {
+  $siteurl = site_url();
+
+  $overlap = min(strlen($url), strlen($siteurl));
+  while ($overlap > 0) {
+    if (substr($siteurl, -$overlap, $overlap) == substr($url, 0, $overlap)) {
+      break;
+    }
+    $overlap -= 1;
+  }
+  
+  return substr($siteurl, 0, strlen($siteurl) - $overlap) . $url;
+}
+
 add_action('admin_bar_menu', 'pkg_autologin_add_admin_bar_generate_link_button', 125); // 125 is somewhere behind the "edit"-button
 function pkg_autologin_add_admin_bar_generate_link_button($wp_admin_bar) {
   if (!is_admin()) {
@@ -622,22 +640,6 @@ function pkg_autologin_add_admin_bar_generate_link_button($wp_admin_bar) {
           $GETQueryPrefix = '?';
         }
 
-        function fuse_url_with_site_url($url) {
-          // fuses a wordpress site postfix with the siteurl to
-          // build a complete url finding the largest overlap between the urls
-          $siteurl = site_url();
-
-          $overlap = min(strlen($url), strlen($siteurl));
-          while ($overlap > 0) {
-            if (substr($siteurl, -$overlap, $overlap) == substr($url, 0, $overlap)) {
-              break;
-            }
-            $overlap -= 1;
-          }
-          
-          return substr($siteurl, 0, strlen($siteurl) - $overlap) . $url;
-        }
-    
         // Now generate menu items with autologin codes for each user
         $i = 0;
         foreach ($autologin_link_users as $user) {
@@ -647,7 +649,7 @@ function pkg_autologin_add_admin_bar_generate_link_button($wp_admin_bar) {
           $htmlUserName = esc_html($user->first_name) . " " . esc_html($user->last_name) . " (" . esc_html($user->user_login) . ")";
           $title = __("Login link for", PKG_AUTOLOGIN_LANGUAGE_DOMAIN) . " " . $htmlUserName;
           
-          $onclick_url = fuse_url_with_site_url($url);
+          $onclick_url = pkg_autologin_fuse_url_with_site_url($url);
           $wp_admin_bar->add_menu( array(
             'parent'  => 'pkg-generate-auto-login-link-menu',
             'id'      => 'pkg-generate-auto-login-link-menu-userindex' . strval($i),

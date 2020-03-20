@@ -2,8 +2,8 @@
 Contributors: WPAutoLogin
 Donate link: 
 Tags: login, link, automatic, auto, links
-Requires at least: 3.1
-Tested up to: 5.2.1
+Requires at least: 4.9.8
+Tested up to: 5.3.2
 Stable tag: trunk
 
 WARNING: THIS PLUGIN CAN BE INSECURE IF NOT USED CAUTIOUSLY. Allows selected 
@@ -79,6 +79,9 @@ issues or pull requests over there!
    redirect link.
 
 == Changelog ==
+
+= 1.11.1 =
+* Fix issue for double include of fuse_url_with_site_url
 
 = 1.11.0 =
 * Add limit to the number of autologin-links shown in the admin 

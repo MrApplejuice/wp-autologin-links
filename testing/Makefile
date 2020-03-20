@@ -19,7 +19,7 @@ TEST_CONTAINERS = \
 	4.9.8-php7.1-apache \
 	5.0.2-php5.6-apache \
 	5.0.3-php7.2-apache \
-	5.3.0-php7.3-apache \
+	5.3.2-php7.3-apache \
 
 
 .PHONY: all _all debug-print lintjs
