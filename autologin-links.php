@@ -4,7 +4,7 @@ Plugin Name: Autologin Links
 Plugin URI: https://www.craftware.info/projects-lists/wordpress-autologin/
 Description: Lets administrators generate autologin links for users.
 Author: Paul Konstantin Gerke
-Version: 1.11.1
+Version: 1.11.2
 Author URI: http://www.craftware.info/
 */
 
@@ -28,7 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 require_once ABSPATH . WPINC . "/class-phpass.php";
 
 //! In-code defintion to allow detection of the autlogin-plugin and its version
-define('PKG_AUTOLOGIN_VERSION', 11101); // Version: 1.11.1
+define('PKG_AUTOLOGIN_VERSION', 11102); // Version: 1.11.2
 
 //! Length for newly generated autologin links 
 define('PKG_AUTOLOGIN_CODE_LENGTH', 32);
@@ -193,6 +193,14 @@ function pkg_autologin_authenticate() {
       $subURIs = array();
       if (preg_match('/^([^\?]+)\?/', $_SERVER["REQUEST_URI"], $subURIs) === 1) {
         $targetPage = $subURIs[1];
+
+        if (isset($_SERVER["HTTP_X_FORWARDED_PREFIX"])) {
+          $prefix = $_SERVER["HTTP_X_FORWARDED_PREFIX"];
+          if (substr($prefix, -1) == "/") {
+            $prefix = substr($prefix, 0, -1);
+          }
+          $targetPage = $prefix . $targetPage;
+        }
         
         // Query login codes
         $loginCodeQuery = $wpdb->prepare(
@@ -236,6 +244,7 @@ function pkg_autologin_authenticate() {
             header("Cache-Control: post-check=0, pre-check=0", false);
             header("Pragma: no-cache");
             header("Expires: Mon, 01 Jan 1990 01:00:00 GMT");
+            header("X-PKG: Redirection attempt to $targetPage $GETQuery");
             
             wp_redirect($protocol . '://' . $_SERVER['HTTP_HOST'] . $targetPage . $GETQuery);
             exit;
