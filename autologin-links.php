@@ -244,7 +244,6 @@ function pkg_autologin_authenticate() {
             header("Cache-Control: post-check=0, pre-check=0", false);
             header("Pragma: no-cache");
             header("Expires: Mon, 01 Jan 1990 01:00:00 GMT");
-            header("X-PKG: Redirection attempt to $targetPage $GETQuery");
             
             wp_redirect($protocol . '://' . $_SERVER['HTTP_HOST'] . $targetPage . $GETQuery);
             exit;
