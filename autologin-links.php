@@ -521,6 +521,7 @@ add_action('edit_user_profile', 'pkg_autologin_plugin_add_extra_profile_fields')
 
 function pkg_autologin_add_control_buttons($current_link_code, $user_id) { // Controls for generating new links or deleting old ones only available to admins
   $prefix = home_url('?' . PKG_AUTOLOGIN_VALUE_NAME . '=');
+  $prefix = apply_filters( 'wp_autologin_links_url_prefix', $prefix );
   ?>
   <input type="hidden" autocomplete="off" id="pkg_autologin_update" name="pkg_autologin_update" value="" />
   <input type="hidden" autocomplete="off" id="pkg_autologin_nonce" name="pkg_autologin_staged_code_nonce" value="<?php echo wp_create_nonce(pkg_new_user_update_nonce_name($user_id)); ?>" />
