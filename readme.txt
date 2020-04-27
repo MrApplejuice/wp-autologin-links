@@ -83,6 +83,8 @@ issues or pull requests over there!
 = 1.11.2 =
 * Add support for X_FORWARDED_PREFIX to allow serving wordpress installations
   using a proxy.
+* Merged PR: Add custom filter for generating example urls called 
+  'pkg_autologin_links_sample_url_prefix'. Thanks to https://github.com/mircobabini
 
 = 1.11.1 =
 * Fix issue for double include of fuse_url_with_site_url
