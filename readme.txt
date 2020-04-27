@@ -3,7 +3,7 @@ Contributors: WPAutoLogin
 Donate link: 
 Tags: login, link, automatic, auto, links
 Requires at least: 4.9.8
-Tested up to: 5.3.2
+Tested up to: 5.4
 Stable tag: trunk
 
 WARNING: THIS PLUGIN CAN BE INSECURE IF NOT USED CAUTIOUSLY. Allows selected 
@@ -79,6 +79,10 @@ issues or pull requests over there!
    redirect link.
 
 == Changelog ==
+
+= 1.11.2 =
+* Add support for X_FORWARDED_PREFIX to allow serving wordpress installations
+  using a proxy.
 
 = 1.11.1 =
 * Fix issue for double include of fuse_url_with_site_url
