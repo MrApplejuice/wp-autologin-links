@@ -1,8 +1,11 @@
 deploy-exclude
 .*
 *.sh
+*~
 node_modules
 testing
 yarn.lock
 package.json
 package-lock.json
+Makefile
+languages/template.pot

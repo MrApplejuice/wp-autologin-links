@@ -83,6 +83,8 @@ issues or pull requests over there!
 = 1.11.3 =
 * Fixed: When using the plugin on big websites, the plugin was obtaining a list of
   all users for the adminbar leading to OOM issues.
+* Update language files and add Makefile generator to automate building all 
+  translation files.
 
 = 1.11.2 =
 * Add support for X_FORWARDED_PREFIX to allow serving wordpress installations

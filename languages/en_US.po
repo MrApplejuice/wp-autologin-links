@@ -3,12 +3,11 @@
 # This file is distributed under the same license as the Autologin Links 
 # package.
 # Paul Konstantin Gerke <wp_autologin@craftware.nl>, 2016.
-
 msgid ""
 msgstr ""
 "Project-Id-Version: WordPress Plugin Autologin Version 2.0\n"
-"Report-Msgid-Bugs-To: wp_autologin@craftware.nl\n"
-"POT-Creation-Date: 2012-01-15 00:45+0100\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-07-12 23:25+0200\n"
 "PO-Revision-Date: 2016-02-21 01:00+0100\n"
 "Last-Translator: Paul Konstantin Gerke <wp_autologin@craftware.nl>\n"
 "Language-Team: -\n"
@@ -17,81 +16,107 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: autologin-links.php:270 autologin-links.php:312 - Shown if trying to login 
-#          with an invalid autologin code
-msgid "Invalid user ID."
-msgstr "Invalid user ID."
-
-#: autologin.php:224 - Shown if an invalid autologin code was used
+#: ../autologin-links.php:281
 msgid "Invalid autologin link."
 msgstr "Invalid autologin link."
 
-#: autologin.php:278 - Shown if update on user edit page failed
+#: ../autologin-links.php:327
+msgid "Missing or invalid staging nonce"
+msgstr ""
+
+#: ../autologin-links.php:332
+msgid "Invalid request for login code change."
+msgstr "Invalid request for login code change."
+
+#          with an invalid autologin code
+#: ../autologin-links.php:345 ../autologin-links.php:454
+#: ../autologin-links.php:476 ../autologin-links.php:492
+#: ../autologin-links.php:510 ../autologin-links.php:541
+msgid "Invalid user ID."
+msgstr "Invalid user ID."
+
+#: ../autologin-links.php:353
+msgid "You do not have permission to edit this user."
+msgstr ""
+
+#: ../autologin-links.php:368
 msgid "Invalid autologin code."
 msgstr "Invalid autologin code."
 
-#: autologin.php:287 - Shown if update on user edit page failed
+#: ../autologin-links.php:375
 msgid "Failed to update autologin link."
 msgstr "Failed to update autologin link."
 
-#: autologin.php:293 - Shown if update on user edit page failed
+#: ../autologin-links.php:384
+msgid "Invalid autologin deletion request."
+msgstr "Invalid autologin deletion request."
+
+#: ../autologin-links.php:389
 msgid "Failed to delete autologin link."
 msgstr "Failed to delete autologin link."
 
-#: autologin.php:324 - As in "generate new autologin link" (button)
+#: ../autologin-links.php:393
+msgid "Invalid action."
+msgstr "Invalid action."
+
+#          with an invalid autologin code
+#: ../autologin-links.php:458 ../autologin-links.php:480
+msgid "Invalid referer."
+msgstr "Invalid referer."
+
+#: ../autologin-links.php:532
 msgid "New"
 msgstr "New"
 
-#: autologin.php:325 - As in "delete autologin link" (button)
+#: ../autologin-links.php:533
 msgid "Delete"
 msgstr "Delete"
 
-#: autologin.php:329 - Title of user edit section
+#: ../autologin-links.php:550
 msgid "Auto-login"
 msgstr "Auto-login"
 
-#: autologin.php:333 - Name of the plugin shown on user profile page and on
-#: autologin-links.php:370    admin toolbar
+#: ../autologin-links.php:554 ../autologin-links.php:612
 msgid "Auto-login link"
 msgstr "Auto-login link"
 
-#: autologin.php:335 - The marker shown when modifying an autologin link
+#: ../autologin-links.php:558
 msgid "Unsaved"
 msgstr "Unsaved"
 
-#: autologin.php:337 - String shown to users who cannot edit their autologin 
 #                      link
+#: ../autologin-links.php:561
 msgid "Please ask an administrator to change your login link"
 msgstr "Please ask an administrator to change your login link"
 
-
-#### New administrator GUI for generating autologin links for pages ####
-
-#: autologin-links.php:384 - Message if no autologin links have been generated
-#                            for any user (admin menu)
-msgid "No users with autologin codes"
-msgstr "No users with autologin codes"
-
-#: autologin-links.php:428 - Message prefix shown in admin menu when gereating
-#                            a link for a user
-msgid "Login link for"
-msgstr "Login link for"
-
-
-#: autologin-links.php:357 - Prefix in front of an user name in link-popup
-msgid "Link for "
-msgstr "Link for "
-
-#: autologin-links.php:355 - text-edit description text in link-popup
+#: ../autologin-links.php:579
 msgid "Link:"
 msgstr "Link:"
 
-#: autologin-links.php:356 - copy instruction in link-popup
+#: ../autologin-links.php:580
 msgid "(press ctrl+c to copy)"
 msgstr "(press ctrl+c to copy)"
 
-#: autologin-links.php:358 - Ok button text in link-popup
+#: ../autologin-links.php:581
+msgid "Link for "
+msgstr "Link for "
+
+#: ../autologin-links.php:582
 msgid "Ok"
 msgstr "Ok"
 
+# ### New administrator GUI for generating autologin links for pages ####
+#                            for any user (admin menu)
+#: ../autologin-links.php:630
+msgid "No users with autologin codes"
+msgstr "No users with autologin codes"
 
+#: ../autologin-links.php:638
+#, php-format
+msgid "Disabled for big websites with more than %d users"
+msgstr ""
+
+#                            a link for a user
+#: ../autologin-links.php:669
+msgid "Login link for"
+msgstr "Login link for"
