@@ -80,6 +80,10 @@ issues or pull requests over there!
 
 == Changelog ==
 
+= 1.11.3 =
+* Fixed: When using the plugin on big websites, the plugin was obtaining a list of
+  all users for the adminbar leading to OOM issues.
+
 = 1.11.2 =
 * Add support for X_FORWARDED_PREFIX to allow serving wordpress installations
   using a proxy.

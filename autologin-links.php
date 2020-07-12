@@ -4,7 +4,7 @@ Plugin Name: Autologin Links
 Plugin URI: https://www.craftware.info/projects-lists/wordpress-autologin/
 Description: Lets administrators generate autologin links for users.
 Author: Paul Konstantin Gerke
-Version: 1.11.2
+Version: 1.11.3
 Author URI: http://www.craftware.info/
 */
 
@@ -28,7 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 require_once ABSPATH . WPINC . "/class-phpass.php";
 
 //! In-code defintion to allow detection of the autlogin-plugin and its version
-define('PKG_AUTOLOGIN_VERSION', 11102); // Version: 1.11.2
+define('PKG_AUTOLOGIN_VERSION', 11103); // Version: 1.11.3
 
 //! Length for newly generated autologin links 
 define('PKG_AUTOLOGIN_CODE_LENGTH', 32);
@@ -51,6 +51,10 @@ define('PKG_AUTOLOGIN_STAGED_CODE_NONCE_USER_META_KEY', 'pkg_autologin_staged_co
 
 //! Language domain key for localization
 define('PKG_AUTOLOGIN_LANGUAGE_DOMAIN', 'pkg_autologin');
+
+//! The number of registered users after which the website is considered a "big website", disabling
+//! certain widgets for performance benefits.
+define('PKG_AUTOLOGIN_BIG_WEBSITE_THRESHOLD', 20);
 
 
 /********* TOOL FUNCTION *********/
@@ -616,7 +620,10 @@ function pkg_autologin_add_admin_bar_generate_link_button($wp_admin_bar) {
       $autologin_link_users = get_users(
         array (
           'meta_key'     => PKG_AUTOLOGIN_USER_META_KEY,
-          'meta_compare' => 'EXISTS') );
+          'meta_compare' => 'EXISTS',
+          'number' => PKG_AUTOLOGIN_BIG_WEBSITE_THRESHOLD + 1,
+        )
+      );
       
       if (count($autologin_link_users) == 0) {
         // No uses can use autologin links, show verbose message
@@ -626,8 +633,11 @@ function pkg_autologin_add_admin_bar_generate_link_button($wp_admin_bar) {
           'id'     => 'pkg-generate-auto-login-link-menu-nousers',
           'title'  => $title
         ));
-      } elseif (count($autologin_link_users) > 20) {
-        $title = __('Disabled for sites with more than 20 autologin codes', PKG_AUTOLOGIN_LANGUAGE_DOMAIN);
+      } elseif (count($autologin_link_users) > PKG_AUTOLOGIN_BIG_WEBSITE_THRESHOLD) {
+        $title = sprintf(__(
+          'Disabled for big websites with more than %d users',
+          PKG_AUTOLOGIN_LANGUAGE_DOMAIN
+        ), PKG_AUTOLOGIN_BIG_WEBSITE_THRESHOLD);
         $wp_admin_bar->add_menu( array(
           'parent' => 'pkg-generate-auto-login-link-menu',
           'id'     => 'pkg-generate-auto-login-link-menu-nousers',
