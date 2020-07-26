@@ -6,7 +6,7 @@ retry_count=60
 
 echo "Running install routine..."
 while [ $retry_count -gt 0 ] ; do
-  if curl -s -X POST -d language= http://localhost:8888/wp-admin/install.php?step=1 > /dev/null ; then
+  if curl -s -X POST -d language= http://localhost/wp-admin/install.php?step=1 > /dev/null ; then
     break
   fi
   retry_count=$[ $retry_count - 1 ]
@@ -30,4 +30,4 @@ curl -s -X POST \
     -d Submit=Install+WordPress \
     -d user_name=wordpress \
     -d weblog_title=wordpress \
-        http://localhost:8888/wp-admin/install.php?step=2 > /dev/null
+        http://localhost/wp-admin/install.php?step=2 > /dev/null

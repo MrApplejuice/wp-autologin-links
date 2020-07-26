@@ -15,7 +15,7 @@ services:
     links:
       - mysql:mysql
     ports:
-      - '8888:80'
+      - '80:80'
     volumes:
      - ..:/var/www/html/wp-content/plugins/autologin-links:ro
     environment:
