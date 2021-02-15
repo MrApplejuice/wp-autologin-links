@@ -2,6 +2,12 @@
 
 prefix=$( tr -d '.' <<< ${prefix:-testing} )
 
+echo "Enable debug mode..."
+docker exec -it ${prefix}_wordpress_1  sed -i -E "s/^.*WP_DEBUG.*false.*$/define( 'WP_DEBUG', true );/" wp-config.php
+docker exec -it ${prefix}_wordpress_1  sed -i -E "s/^(.*WP_DEBUG.*)$/\1\ndefine( 'WP_ALLOW_MULTISITE', true );/" wp-config.php
+docker exec -it ${prefix}_wordpress_1  apt update 
+docker exec -it ${prefix}_wordpress_1  apt-get install -y vim
+
 echo "Installing internal test code..."
 docker exec -it ${prefix}_wordpress_1  rm -rf /tmp/internal-tests || true
 docker cp internal-tests ${prefix}_wordpress_1:/tmp/internal-tests
