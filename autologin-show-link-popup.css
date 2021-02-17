@@ -52,6 +52,9 @@
   background-image: url("close.png");
   background-repeat: no-repeat;
   background-position: center;
+
+  color: transparent;
+  font-size: 0;
 }
 
 .pkg_autologin_display_popup_class.ui-dialog .ui-dialog-titlebar .ui-button.ui-dialog-titlebar-close .ui-icon {
@@ -65,6 +68,10 @@
 .pkg_autologin_display_popup_class.ui-dialog .ui-dialog-content {
   margin: 10px;
   font-family: verdana,arial,sans-serif;
+}
+
+.pkg_autologin_display_popup_class.ui-dialog .ui-dialog-content .link-field {
+  width: 100%;
 }
 
 .pkg_autologin_display_popup_class.ui-dialog .ui-dialog-content p {

@@ -30,8 +30,7 @@ jQuery(function($) {
     buttons[pkg_autologin_show_link_translation_strings.ok_button] = function() { dialog.dialog("close"); };
     
     dialog.dialog({
-        height: 250,
-        width: 400,
+        width: 600,
         title: pkg_autologin_show_link_translation_strings.title_prefix + user,
         dialogClass: 'pkg_autologin_display_popup_class',
         buttons: buttons
