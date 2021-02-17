@@ -13,13 +13,25 @@ function pkg_autologin_define_menu() {
 
 function pkg_autologin_options_menu() {
   $adminbar_enabled = pkg_autologin_is_admin_bar_enabled();
+  $lockout_repeatitions = intval(get_option(PKG_AUTOLOGIN_OPTION_SECURITY_LOCKOUT_REPEATITIONS, "20"));
+  $lockout_timeout = intval(get_option(PKG_AUTOLOGIN_OPTION_SECURITY_LOCKOUT_TIMEOUT, "10"));
+
   if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if (!check_admin_referer("pkg_autologin_options")) {
       wp_die("Invalid request");
     }
 
-    $adminbar_enabled = isset($_POST["pkg-autologin-options-enable-admin-bar-enable"]) && ($_POST["pkg-autologin-options-enable-admin-bar-enable"] === "on");
-    update_option("pkg_autologin_admin_bar_enabled",$adminbar_enabled ? 1 : 0);
+    $adminbar_enabled = isset($_POST["pkg-autologin-options-enable-admin-bar-enable"]) 
+      && ($_POST["pkg-autologin-options-enable-admin-bar-enable"] === "on");
+    if (isset($_POST["pkg-autologin-options-lockout-count"])) {
+      $lockout_repeatitions = max(0, intval($_POST["pkg-autologin-options-lockout-count"]));
+    }
+    if (isset($_POST["pkg-autologin-options-lockout-minutes"])) {
+      $lockout_timeout = max(1, intval($_POST["pkg-autologin-options-lockout-minutes"]));
+    }
+    
+    update_option(PKG_AUTOLOGIN_OPTION_ADMIN_BAR_ENABLE, $adminbar_enabled ? "1" : "0");
+    update_option(PKG_AUTOLOGIN_OPTION_SECURITY_LOCKOUT_REPEATITIONS, $lockout_repeatitions);
     ?>
   <div class="notice notice-success is-dismissible">
     <p>Changes saved</p>
@@ -38,16 +50,19 @@ function pkg_autologin_options_menu() {
             <tr>
               <th>Max retries lockout:</th>
               <td>
-                <input name="pkg-autologin-options-lockout-count" type="number" value="20" />
+                <input name="pkg-autologin-options-lockout-count" type="number" min="0" value="<?php echo "$lockout_repeatitions"; ?>" />
                 <p>
                   Number of allowed retries from a single IP until that IP is locked out for given amount of time.
+                </p>
+                <p>
+                  Set to zero to disable lockouts (not recommended!).
                 </p>
               </td>
             </tr>
             <tr>
               <th>Retry lockout timout:</th>
               <td>
-                <input name="pkg-autologin-options-lockout-minutes" type="number" value="10" />
+                <input name="pkg-autologin-options-lockout-minutes" type="number" min="1" value="<?php echo "$lockout_timeout"; ?>" />
                 <p>
                   Number of minutes until the lockout for a given IP address resets.
                 </p>
@@ -57,7 +72,7 @@ function pkg_autologin_options_menu() {
               <th>Admin bar</th>
               <td>
                 <input name="pkg-autologin-options-enable-admin-bar-enable" id="pkg-autologin-options-enable-admin-bar-enable" type="checkbox" <?php if ($adminbar_enabled) { echo 'checked="checked"'; } ?> />
-                <label for="pkg-autologin-options-enable-admin-bar-enable">Show</label>
+                <label for="pkg-autologin-options-enable-admin-bar-enable">Show admin bar for generating autologin links to specific pages.</label>
               </td>
             </tr>
           </tbody>

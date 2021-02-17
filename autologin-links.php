@@ -56,6 +56,11 @@ define('PKG_AUTOLOGIN_LANGUAGE_DOMAIN', 'pkg_autologin');
 //! certain widgets for performance benefits.
 define('PKG_AUTOLOGIN_BIG_WEBSITE_THRESHOLD', 20);
 
+//! Option keys used as part of the database
+define('PKG_AUTOLOGIN_OPTION_ADMIN_BAR_ENABLE', 'pkg_autologin_admin_bar_enabled');
+define('PKG_AUTOLOGIN_OPTION_SECURITY_LOCKOUT_REPEATITIONS', 'pkg_autologin_security_lockout_repeatitions');
+define('PKG_AUTOLOGIN_OPTION_SECURITY_LOCKOUT_TIMEOUT', 'pkg_autologin_security_lockout_timeout');
+
 
 /********* TOOL FUNCTION *********/
 

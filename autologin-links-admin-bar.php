@@ -5,7 +5,7 @@
  * Check whether the admin bar is enabled or not.
  */
 function pkg_autologin_is_admin_bar_enabled() {
-  return get_option("pkg_autologin_admin_bar_enabled", "1") === "1";
+  return get_option(PKG_AUTOLOGIN_OPTION_ADMIN_BAR_ENABLE, "1") === "1";
 }
 
 add_action('wp_enqueue_scripts', 'pkg_autologin_load_autologin_show_link_scripts');
