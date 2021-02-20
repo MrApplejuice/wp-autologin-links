@@ -1,5 +1,6 @@
 <?php
 require_once "autologin-links-admin-bar.php";
+require_once "autologin-links-options.php";
 
 add_action('admin_menu', 'pkg_autologin_define_menu');
 function pkg_autologin_define_menu() {
@@ -13,8 +14,8 @@ function pkg_autologin_define_menu() {
 
 function pkg_autologin_options_menu() {
   $adminbar_enabled = pkg_autologin_is_admin_bar_enabled();
-  $lockout_repeatitions = intval(get_option(PKG_AUTOLOGIN_OPTION_SECURITY_LOCKOUT_REPEATITIONS, "20"));
-  $lockout_timeout = intval(get_option(PKG_AUTOLOGIN_OPTION_SECURITY_LOCKOUT_TIMEOUT, "10"));
+  $lockout_repeatitions = pkg_autologin_get_default_option(PKG_AUTOLOGIN_OPTION_SECURITY_LOCKOUT_REPEATITIONS);
+  $lockout_timeout = pkg_autologin_get_default_option(PKG_AUTOLOGIN_OPTION_SECURITY_LOCKOUT_TIMEOUT);
 
   if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if (!check_admin_referer("pkg_autologin_options")) {
@@ -32,6 +33,7 @@ function pkg_autologin_options_menu() {
     
     update_option(PKG_AUTOLOGIN_OPTION_ADMIN_BAR_ENABLE, $adminbar_enabled ? "1" : "0");
     update_option(PKG_AUTOLOGIN_OPTION_SECURITY_LOCKOUT_REPEATITIONS, $lockout_repeatitions);
+    update_option(PKG_AUTOLOGIN_OPTION_SECURITY_LOCKOUT_TIMEOUT, $lockout_timeout);
     ?>
   <div class="notice notice-success is-dismissible">
     <p>Changes saved</p>

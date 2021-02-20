@@ -4,7 +4,7 @@ Plugin Name: Autologin Links
 Plugin URI: https://www.craftware.info/projects-lists/wordpress-autologin/
 Description: Lets administrators generate autologin links for users.
 Author: Paul Konstantin Gerke
-Version: 1.11.3
+Version: 1.12.0
 Author URI: http://www.craftware.info/
 */
 
@@ -28,7 +28,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 require_once ABSPATH . WPINC . "/class-phpass.php";
 
 //! In-code defintion to allow detection of the autlogin-plugin and its version
-define('PKG_AUTOLOGIN_VERSION', 11103); // Version: 1.11.3
+define('PKG_AUTOLOGIN_VERSION', 11200); // Version: 1.12.0
 
 //! Length for newly generated autologin links 
 define('PKG_AUTOLOGIN_CODE_LENGTH', 32);
@@ -60,6 +60,12 @@ define('PKG_AUTOLOGIN_BIG_WEBSITE_THRESHOLD', 20);
 define('PKG_AUTOLOGIN_OPTION_ADMIN_BAR_ENABLE', 'pkg_autologin_admin_bar_enabled');
 define('PKG_AUTOLOGIN_OPTION_SECURITY_LOCKOUT_REPEATITIONS', 'pkg_autologin_security_lockout_repeatitions');
 define('PKG_AUTOLOGIN_OPTION_SECURITY_LOCKOUT_TIMEOUT', 'pkg_autologin_security_lockout_timeout');
+define('PKG_AUTOLOGIN_OPTION_SECURITY_LOCKOUT_RECORDS', 'pkg_autologin_security_lockout_records');
+
+
+require_once "autologin-links-admin-bar.php";
+require_once "autologin-links-menu.php";
+require_once "autologin-links-reject-retries.php";
 
 
 /********* TOOL FUNCTION *********/
@@ -194,10 +200,10 @@ function pkg_autologin_authenticate() {
   global $wpdb;
   
   // Check if autologin link is specified - if there is one the work begins
-  if (isset($_GET[PKG_AUTOLOGIN_VALUE_NAME])) {    
+  if (isset($_GET[PKG_AUTOLOGIN_VALUE_NAME])) {
     $autologin_code = preg_replace('/[^a-zA-Z0-9]+/', '', $_GET[PKG_AUTOLOGIN_VALUE_NAME]);
     
-    if ($autologin_code) { // Check if not empty
+    if ($autologin_code && pkg_autologin_check_remote_can_login()) { // Check if not empty
       // Get part left of ? of the request URI for resassembling the target url later
       $subURIs = array();
       if (preg_match('/^([^\?]+)\?/', $_SERVER["REQUEST_URI"], $subURIs) === 1) {
@@ -254,6 +260,7 @@ function pkg_autologin_authenticate() {
             header("Pragma: no-cache");
             header("Expires: Mon, 01 Jan 1990 01:00:00 GMT");
             
+            pkg_autologin_mark_successful_login();
             wp_redirect($protocol . '://' . $_SERVER['HTTP_HOST'] . $targetPage . $GETQuery);
             exit;
           }
@@ -261,6 +268,8 @@ function pkg_autologin_authenticate() {
       } 
     }
     
+    pkg_autologin_mark_failed_login();
+
     // If something went wrong send the user to login-page (and log the old user out if there was any)
     wp_logout();
     wp_redirect(home_url('wp-login.php?pkg_autologin_error=invalid_login_code'));
@@ -573,8 +582,5 @@ function pkg_autologin_plugin_add_extra_profile_fields() {
     }
   }
 }
-
-require_once "autologin-links-admin-bar.php";
-require_once "autologin-links-menu.php";
 
 ?>
