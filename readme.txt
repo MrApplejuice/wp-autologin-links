@@ -3,7 +3,7 @@ Contributors: WPAutoLogin
 Donate link: 
 Tags: login, link, automatic, auto, links
 Requires at least: 4.9.8
-Tested up to: 5.4
+Tested up to: 5.6
 Stable tag: trunk
 
 WARNING: THIS PLUGIN CAN BE INSECURE IF NOT USED CAUTIOUSLY. Allows selected 
