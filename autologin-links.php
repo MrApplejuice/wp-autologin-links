@@ -394,7 +394,7 @@ function pkg_autologin_update_link() {
       pkg_autologin_validate_update_nonce($user_id);
       
       $new_key = get_user_meta($user_id, PKG_AUTOLOGIN_STAGED_CODE_USER_META_KEY, True);
-      if ($new_key !== null) {
+      if ($new_key !== ':null') {
         wp_die(__('Invalid autologin deletion request.'));
       }
       
@@ -496,7 +496,7 @@ function pkg_autologin_stage_code_deletion() {
 
   $wpnonce = $_REQUEST['_wpnonce'];
   update_user_meta($user_id, PKG_AUTOLOGIN_STAGED_CODE_NONCE_USER_META_KEY, $wpnonce);
-  update_user_meta($user_id, PKG_AUTOLOGIN_STAGED_CODE_USER_META_KEY, null);
+  update_user_meta($user_id, PKG_AUTOLOGIN_STAGED_CODE_USER_META_KEY, ':null');
 }
 
 add_action('wp_ajax_pkg_autologin_plugin_ajax_new_code', 'pkg_autologin_plugin_new_code_ajax_wrapper');
