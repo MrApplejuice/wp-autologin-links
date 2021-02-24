@@ -87,6 +87,7 @@ issues or pull requests over there!
 * Feature: (Security) Add limited number of login retries from a single remote 
   address. Remote IP addresses are blacklisted for certain amount of time after
   too many login failures. Can be disabled from the new menu.
+* Fixed: Deleting autologin links was impossible after a recent wordpress update.
 
 = 1.11.3 =
 * Fixed: When using the plugin on big websites, the plugin was obtaining a list of
