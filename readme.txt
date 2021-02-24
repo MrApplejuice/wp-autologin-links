@@ -80,6 +80,14 @@ issues or pull requests over there!
 
 == Changelog ==
 
+= 1.12.0 =
+* Feature: Add admin menu under Settings -> Autlogin Links that allows to:
+* Feature: Disable the "generate autologin-link" adminbar menu for good.
+* Feature: Set the details of the new loging-lockout feature.
+* Feature: (Security) Add limited number of login retries from a single remote 
+  address. Remote IP addresses are blacklisted for certain amount of time after
+  too many login failures. Can be disabled from the new menu.
+
 = 1.11.3 =
 * Fixed: When using the plugin on big websites, the plugin was obtaining a list of
   all users for the adminbar leading to OOM issues.

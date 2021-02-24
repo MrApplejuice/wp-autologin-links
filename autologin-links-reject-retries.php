@@ -1,6 +1,13 @@
 <?php
 require_once "autologin-links-options.php";
 
+/**
+ * Generates a footprint for the connecting side to indentify the remote side
+ * without storing the actual IP address.
+ * 
+ * @return string
+ *   Returns a string reference fo the remote side.
+ */
 function pkg_autologin_generate_remote_footprint() {
     $salt = $_SERVER['SERVER_ADDR'] . ":" . "Autologinlinks4lt1111";
     return substr(md5($salt . ':' . $_SERVER['REMOTE_ADDR']), 0, 16);

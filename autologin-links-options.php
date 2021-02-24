@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * Utility function allowing to obtain setting options ina standardized form.
+ * 
+ * @param $name
+ *   String indentifying the option to obtain.
+ * 
+ * @return
+ *   Value of the type associated with the corresponding option.
+ */
 function pkg_autologin_get_default_option($name) {
     if ($name === PKG_AUTOLOGIN_OPTION_SECURITY_LOCKOUT_REPEATITIONS) {
         return intval(get_option(PKG_AUTOLOGIN_OPTION_SECURITY_LOCKOUT_REPEATITIONS, "20"));
