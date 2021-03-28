@@ -81,7 +81,7 @@ issues or pull requests over there!
 == Changelog ==
 
 = 1.12.0 =
-* Feature: Add admin menu under Settings -> Autlogin Links that allows to:
+* Feature: Add admin menu under Settings -> Autologin-Links that allows to:
 * Feature: Disable the "generate autologin-link" adminbar menu for good.
 * Feature: Set the details of the new loging-lockout feature.
 * Feature: (Security) Add limited number of login retries from a single remote 
