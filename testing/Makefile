@@ -12,16 +12,17 @@ test-$(1): run-test-$(1)
 	wordpress_image_name=wordpress:$(1) docker-compose -p $(1) down
 
 ALL_TARGETS += test-$(1)
+RUN_TARGET := run-test-$(1)
 endef
 
 TEST_CONTAINERS = \
 	4.9.8-php5.6-apache \
 	5.0.3-php7.2-apache \
-	5.4.2-php7.3-apache \
 	5.6.0-php7.4-apache \
+	5.7.2-php7.4-apache \
 
 
-.PHONY: all _all debug-print lintjs
+.PHONY: all _all debug-print lintjs run
 
 all: _all
 
@@ -37,4 +38,7 @@ _all: $(ALL_TARGETS)
 
 debug-print:
 	echo $(ALL_TARGETS)
+
+
+run: $(RUN_TARGET)
 
