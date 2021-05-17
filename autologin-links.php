@@ -61,6 +61,7 @@ define('PKG_AUTOLOGIN_OPTION_ADMIN_BAR_ENABLE', 'pkg_autologin_admin_bar_enabled
 define('PKG_AUTOLOGIN_OPTION_SECURITY_LOCKOUT_REPEATITIONS', 'pkg_autologin_security_lockout_repeatitions');
 define('PKG_AUTOLOGIN_OPTION_SECURITY_LOCKOUT_TIMEOUT', 'pkg_autologin_security_lockout_timeout');
 define('PKG_AUTOLOGIN_OPTION_SECURITY_LOCKOUT_RECORDS', 'pkg_autologin_security_lockout_records');
+define('PKG_AUTOLOGIN_OPTION_SECURITY_ERROR_ACTION', 'pkg_autologin_security_error_action');
 
 
 require_once "autologin-links-admin-bar.php";

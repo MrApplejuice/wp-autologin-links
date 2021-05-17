@@ -1,5 +1,20 @@
 <?php
 
+abstract class PKG_Autologin_Option_Error_action
+{
+    const Normal = 0;
+    const Silent = 1;
+    const Generate404 = 2;
+    const Count = 3;
+
+    const MODE_STRINGS = array(
+        0 => "Redirect to login page",
+        1 => "Fail silently, continue with current login token",
+        2 => "Generate 404 error",
+    );
+}
+
+
 /**
  * Utility function allowing to obtain setting options ina standardized form.
  * 
@@ -25,6 +40,9 @@ function pkg_autologin_get_default_option($name) {
             return $result;
         }
         return array();
+    }
+    if ($name === PKG_AUTOLOGIN_OPTION_SECURITY_ERROR_ACTION) {
+        return intval(get_option(PKG_AUTOLOGIN_OPTION_SECURITY_ERROR_ACTION, "0"));
     }
     throw "Not a valid option";
 }

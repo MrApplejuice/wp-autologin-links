@@ -28,13 +28,17 @@ function pkg_autologin_options_menu() {
       $lockout_repeatitions = max(0, intval($_POST["pkg-autologin-options-lockout-count"]));
     }
     if (isset($_POST["pkg-autologin-options-lockout-minutes"])) {
-      $lockout_timeout = max(1, intval($_POST["pkg-autologin-options-lockout-minutes"]));
+        $lockout_timeout = max(1, intval($_POST["pkg-autologin-options-lockout-minutes"]));
+    }  
+    if (isset($_POST["pkg-autologin-options-code-fail-action"])) {
+      $login_code_fail_action = max(0, min(PKG_Autologin_Option_Error_action::Count - 1, intval($_POST["pkg-autologin-options-code-fail-action"])));
     }
-    
+        
     update_option(PKG_AUTOLOGIN_OPTION_ADMIN_BAR_ENABLE, $adminbar_enabled ? "1" : "0");
     update_option(PKG_AUTOLOGIN_OPTION_SECURITY_LOCKOUT_REPEATITIONS, $lockout_repeatitions);
     update_option(PKG_AUTOLOGIN_OPTION_SECURITY_LOCKOUT_TIMEOUT, $lockout_timeout);
-    ?>
+    update_option(PKG_AUTOLOGIN_OPTION_SECURITY_ERROR_ACTION, $login_code_fail_action);
+  ?>
   <div class="notice notice-success is-dismissible">
     <p>Changes saved</p>
   </div>
@@ -75,6 +79,23 @@ function pkg_autologin_options_menu() {
               <td>
                 <input name="pkg-autologin-options-enable-admin-bar-enable" id="pkg-autologin-options-enable-admin-bar-enable" type="checkbox" <?php if ($adminbar_enabled) { echo 'checked="checked"'; } ?> />
                 <label for="pkg-autologin-options-enable-admin-bar-enable">Show admin bar for generating autologin links to specific pages.</label>
+              </td>
+            </tr>
+            <tr>
+              <th>Login failure action</th>
+              <td>
+                <select name="pkg-autologin-options-code-fail-action">
+                  <?php
+                    $preselect = pkg_autologin_get_default_option(PKG_AUTOLOGIN_OPTION_SECURITY_ERROR_ACTION);
+                    for ($i = 0; $i < PKG_Autologin_Option_Error_action::Count; $i++) {
+                      $selected = $i == $preselect ? " selected" : "";
+                      echo "<option value='$i'$selected>" . PKG_Autologin_Option_Error_action::MODE_STRINGS[$i] . "</option>";
+                    }
+                  ?>
+                </select>
+                <p>
+                  Action to be taken if an invalid login code is used.
+                </p>
               </td>
             </tr>
           </tbody>
