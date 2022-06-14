@@ -111,7 +111,7 @@ function pkg_autologin_check_view_permissions($user_id=NULL) {
 /**
  * <p>Joins the array-list of parameters to a correct GET-request parameter list. For example:</p>
  * 
- * <p>array('a' => 1, 'b' => 2, 'c' => 3) becomes a=1&b=2&c=3</p>
+ * <p>array('a' => [1,2], 'b' => 2, 'c' => 3) becomes a%5B0%5D=1a%5B1%5D=2&b=2&c=3</p>
  * 
  * @param array $parameters
  *   The parameters to join together to form the GET-request url part
@@ -119,12 +119,7 @@ function pkg_autologin_check_view_permissions($user_id=NULL) {
  *   The formed get-request string
  */
 function pkg_autologin_join_get_parameters($parameters) {
-  $keys = array_keys($parameters);
-  $assignments = array();
-  foreach ($keys as $key) {
-    $assignments[] = rawurlencode($key) . "=" . rawurlencode($parameters[$key]);
-  }
-  return implode('&', $assignments);
+  return http_build_query($parameters, "", null, PHP_QUERY_RFC3986);
 }
 
 /**
